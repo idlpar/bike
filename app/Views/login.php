@@ -58,12 +58,12 @@
                 <?php endif; ?>
                 <?php if (empty($config['login_form']) || 'floating_labels' == ($config['login_form'])): ?>
                     <div class="form-floating mt-3">
-                        <input class="form-control form-control-lg" id="input-username" name="username" type="text" placeholder="<?= lang('Login.username') ?>" <?php if (ENVIRONMENT == "testing") echo 'value="admin"'; ?>>
-                        <label for="input-username"><?= lang('Login.username') ?></label>
+                        <input class="form-control form-control-lg" id="input-username" name="username" type="text" <?php if (ENVIRONMENT == "testing") echo 'value="admin"'; ?>>
+                        <label for="input-username" class="text-white"><?= lang('Login.username') ?></label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control form-control-lg" id="input-password" name="password" type="password" placeholder="<?= lang('Login.password') ?>" <?php if (ENVIRONMENT == "testing") echo 'value="pointofsale"'; ?>>
-                        <label for="input-password"><?= lang('Login.password') ?></label>
+                        <input class="form-control form-control-lg" id="input-password" name="password" type="password" <?php if (ENVIRONMENT == "testing") echo 'value="pointofsale"'; ?>>
+                        <label for="input-password" class="text-white"><?= lang('Login.password') ?></label>
                     </div>
                 <?php elseif ('input_groups' == ($config['login_form'])): ?>
                     <div class="input-group mt-3">
@@ -92,7 +92,7 @@
                 }
                 ?>
                 <div class="d-grid">
-                    <button class="btn btn-lg btn-primary" name="login-button" type="submit"><?= lang('Login.go') ?></button>
+                    <button class="btn btn-success btn-lg" name="login-button" type="submit"><?= lang('Login.go') ?></button>
                 </div>
                 <?= form_close() ?>
             </section>

@@ -255,18 +255,7 @@ class Customers extends Persons
             'state'        => $this->request->getPost('state'),
             'zip'          => $this->request->getPost('zip'),
             'country'      => $this->request->getPost('country'),
-            'comments'     => $this->request->getPost('comments'),
-            'father_husband_name' => $this->request->getPost('father_husband_name'),
-            'mother_name' => $this->request->getPost('mother_name'),
-            'date_of_birth' => $this->request->getPost('date_of_birth'),
-            'national_id' => $this->request->getPost('national_id'),
-            'alternative_phone_number' => $this->request->getPost('alternative_phone_number'),
-            'village' => $this->request->getPost('village'),
-            'post_office' => $this->request->getPost('post_office'),
-            'thana_upazilla' => $this->request->getPost('thana_upazilla'),
-            'district' => $this->request->getPost('district'),
-            'division' => $this->request->getPost('division'),
-            'present_address' => $this->request->getPost('present_address')
+            'comments'     => $this->request->getPost('comments')
         ];
 
         $date_formatter = date_create_from_format($this->config['dateformat'] . ' ' . $this->config['timeformat'], $this->request->getPost('date'));
@@ -282,12 +271,7 @@ class Customers extends Persons
             'taxable'           => $this->request->getPost('taxable') != null,
             'date'              => $date_formatter->format('Y-m-d H:i:s'),
             'employee_id'       => $this->request->getPost('employee_id', FILTER_SANITIZE_NUMBER_INT),
-            'sales_tax_code_id' => $this->request->getPost('sales_tax_code_id') == '' ? null : $this->request->getPost('sales_tax_code_id', FILTER_SANITIZE_NUMBER_INT),
-            'customer_type' => $this->request->getPost('customer_type'),
-            'customer_group' => $this->request->getPost('customer_group'),
-            'customer_company' => $this->request->getPost('customer_company'),
-            'init_amount' => $this->request->getPost('init_amount'),
-            'account_no' => $this->request->getPost('account_no')
+            'sales_tax_code_id' => $this->request->getPost('sales_tax_code_id') == '' ? null : $this->request->getPost('sales_tax_code_id', FILTER_SANITIZE_NUMBER_INT)
         ];
 
         if ($this->customer->save_customer($person_data, $customer_data, $customer_id)) {

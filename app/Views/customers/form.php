@@ -35,7 +35,7 @@
     <div class="tab-content">
         <div class="tab-pane fade in active" id="customer_basic_info">
             <fieldset>
-                <div class="form-group form-group-sm">
+                <div class="form-group form-group-sm" style="display: none;">
                     <?= form_label(lang('Customers.consent'), 'consent', ['class' => 'required control-label col-xs-3']) ?>
                     <div class="col-xs-1">
                         <?= form_checkbox('consent', 1, true, ['disabled' => 'disabled']) ?>
@@ -146,10 +146,27 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="form-group form-group-sm">
+                <div class="form-group form-group-sm" style="display: none;">
                     <?= form_label(lang('Customers.taxable'), 'taxable', ['class' => 'control-label col-xs-3']) ?>
-                    <div class="col-xs-1">
-                        <?= form_checkbox('taxable', 1, $person_info->taxable == 1) ?>
+                    <div class="col-xs-8">
+                        <label class="radio-inline">
+                            <?= form_radio([
+                                'name'    => 'taxable',
+                                'type'    => 'radio',
+                                'id'      => 'taxable_yes',
+                                'value'   => 1,
+                                'checked' => $person_info->taxable == 1
+                            ]) ?> <?= lang('Common.yes') ?>
+                        </label>
+                        <label class="radio-inline">
+                            <?= form_radio([
+                                'name'    => 'taxable',
+                                'type'    => 'radio',
+                                'id'      => 'taxable_no',
+                                'value'   => 0,
+                                'checked' => $person_info->taxable == 0
+                            ]) ?> <?= lang('Common.no') ?>
+                        </label>
                     </div>
                 </div>
 
@@ -486,6 +503,7 @@
                 first_name: 'required',
                 last_name: 'required',
                 consent: 'required',
+                phone_number: 'required',
                 email: {
                     remote: {
                         url: "<?= "$controller_name/checkEmail" ?>",
@@ -512,6 +530,7 @@
                 first_name: "<?= lang('Common.first_name_required') ?>",
                 last_name: "<?= lang('Common.last_name_required') ?>",
                 consent: "<?= lang('Customers.consent_required') ?>",
+                phone_number: "<?= lang('Common.phone_number_required') ?>",
                 email: "<?= lang('Customers.email_duplicate') ?>",
                 account_number: "<?= lang('Customers.account_number_duplicate') ?>"
             }

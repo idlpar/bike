@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Libraries\Mailchimp_lib;
+use DateTime;
 
 use App\Models\Customer;
 use App\Models\Customer_rewards;
@@ -150,6 +151,13 @@ class Customers extends Persons
         }
         $data['person_info'] = $info;
 
+        // Format date_of_birth for display
+        if (!empty($info->date_of_birth)) {
+            $data['person_info']->date_of_birth = date('d-m-Y', strtotime($info->date_of_birth));
+        } else {
+            $data['person_info']->date_of_birth = '';
+        }
+
         if (empty($info->person_id) || empty($info->date) || empty($info->employee_id)) {
             $data['person_info']->date = date('Y-m-d H:i:s');
             $data['person_info']->employee_id = $this->employee->get_logged_in_employee_info()->person_id;
@@ -243,25 +251,38 @@ class Customers extends Persons
         $first_name = $this->nameize($first_name);
         $last_name = $this->nameize($last_name);
 
+        $date_of_birth = $this->request->getPost('date_of_birth');
+        if (!empty($date_of_birth)) {
+            $date_of_birth = date('Y-m-d', strtotime($date_of_birth));
+        } else {
+            $date_of_birth = null;
+        }
+
         $person_data = [
-            'first_name'   => $first_name,
-            'last_name'    => $last_name,
-            'gender'       => $this->request->getPost('gender', FILTER_SANITIZE_NUMBER_INT),
-            'email'        => $email,
-            'phone_number' => $this->request->getPost('phone_number'),
-            'address_1'    => $this->request->getPost('address_1'),
-            'address_2'    => $this->request->getPost('address_2'),
-            'city'         => $this->request->getPost('city'),
-            'state'        => $this->request->getPost('state'),
-            'zip'          => $this->request->getPost('zip'),
-            'country'      => $this->request->getPost('country'),
-            'comments'     => $this->request->getPost('comments')
+            'first_name'        => $first_name,
+            'last_name'         => $last_name,
+            'father_husband_name' => $this->request->getPost('father_husband_name'),
+            'mother_name'       => $this->request->getPost('mother_name'),
+            'date_of_birth'     => $date_of_birth,
+            'national_id'       => $this->request->getPost('national_id'),
+            'gender'            => $this->request->getPost('gender', FILTER_SANITIZE_NUMBER_INT),
+            'email'             => $email,
+            'phone_number'      => $this->request->getPost('phone_number'),
+            'alt_phone_number'  => $this->request->getPost('alt_phone_number'),
+            'address_1'         => $this->request->getPost('address_1'),
+            'address_2'         => $this->request->getPost('address_2'),
+            'city'              => $this->request->getPost('city'),
+            'state'             => $this->request->getPost('state'),
+            'zip'               => $this->request->getPost('zip'),
+            'country'           => $this->request->getPost('country'),
+            'comments'          => $this->request->getPost('comments')
         ];
 
         $date_formatter = date_create_from_format($this->config['dateformat'] . ' ' . $this->config['timeformat'], $this->request->getPost('date'));
 
         $customer_data = [
             'consent'           => $this->request->getPost('consent') != null,
+            'customer_type'     => $this->request->getPost('customer_type'),
             'account_number'    => $this->request->getPost('account_number') == '' ? null : $this->request->getPost('account_number'),
             'tax_id'            => $this->request->getPost('tax_id'),
             'company_name'      => $this->request->getPost('company_name') == '' ? null : $this->request->getPost('company_name'),

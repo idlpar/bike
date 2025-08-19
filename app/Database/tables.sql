@@ -128,7 +128,7 @@ CREATE TABLE `ospos_employees` (
 --
 
 INSERT INTO `ospos_employees` (`username`, `password`, `person_id`, `deleted`, `hash_version`) VALUES
-    ('admin', '$2y$10$vJBSMlD02EC7ENSrKfVQXuvq9tNRHMtcOA8MSK2NYS748HHWm.gcG', 1, 0, 2);
+    ('admin', '$2y$10$Qr1MFjMdn512OZ2H2XfWv.6VWses.A21.uccFXXAVtoPI84w.871u', 1, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -349,7 +349,7 @@ CREATE TABLE `ospos_people` (
 --
 
 INSERT INTO `ospos_people` (`first_name`, `last_name`, `phone_number`, `email`, `address_1`, `address_2`, `city`, `state`, `zip`, `country`, `comments`, `person_id`) VALUES
-    ('John', 'Doe', '555-555-5555', 'changeme@example.com', 'Address 1', '', '', '', '', '', '', 1);
+    ('Parvez', 'Ahmed', '01612233369', 'admin@tarpor.com', 'House 06, East Mollartek', '', '', '', '', '', '', 1);
 
 -- --------------------------------------------------------
 

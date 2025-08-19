@@ -42,6 +42,30 @@
                     </div>
                 </div>
 
+                <div class="form-group form-group-sm">
+                    <?= form_label(lang('Customers.customer_type'), 'customer_type', ['class' => 'control-label col-xs-3']) ?>
+                    <div class="col-xs-8">
+                        <label class="radio-inline">
+                            <?= form_radio([
+                                'name'    => 'customer_type',
+                                'type'    => 'radio',
+                                'id'      => 'customer_type_private',
+                                'value'   => 'private',
+                                'checked' => !isset($person_info->customer_type) || $person_info->customer_type == 'private'
+                            ]) ?> <?= lang('Customers.customer_type_private') ?>
+                        </label>
+                        <label class="radio-inline">
+                            <?= form_radio([
+                                'name'    => 'customer_type',
+                                'type'    => 'radio',
+                                'id'      => 'customer_type_organization',
+                                'value'   => 'organization',
+                                'checked' => $person_info->customer_type == 'organization'
+                            ]) ?> <?= lang('Customers.customer_type_organization') ?>
+                        </label>
+                    </div>
+                </div>
+
                 <?= view('people/form_basic_info') ?>
 
                 <div class="form-group form-group-sm">
@@ -535,5 +559,24 @@
                 account_number: "<?= lang('Customers.account_number_duplicate') ?>"
             }
         }, form_support.error));
+
+        // Show/hide company name based on customer type
+        var toggleCompanyName = function() {
+            if ($('input[name="customer_type"]:checked').val() === 'private') {
+                $('#customer_company_name').closest('.form-group').hide();
+                $('#customer_company_name').val(''); // Clear value when hidden
+            } else {
+                $('#customer_company_name').closest('.form-group').show();
+            }
+        };
+
+        $('input[name="customer_type"]').change(toggleCompanyName);
+        toggleCompanyName(); // Initial call on load
+
+        // Initialize date picker for Date of Birth
+        // Initialize date picker for Date of Birth (jQuery UI Datepicker)
+        $('#date_of_birth').datetimepicker({
+            format: 'DD-MM-YYYY',
+        });
     });
 </script>

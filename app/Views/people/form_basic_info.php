@@ -30,16 +30,57 @@
 </div>
 
 <div class="form-group form-group-sm">
-    <?= form_label(lang('Customers.father_husband_name'), 'address_2', ['class' => 'control-label col-xs-3']) ?>
+    <?= form_label(lang('Customers.father_husband_name'), 'father_husband_name', ['class' => 'control-label col-xs-3']) ?>
     <div class="col-xs-8">
         <?= form_input([
-            'name'  => 'address_2',
-            'id'    => 'address_2',
+            'name'  => 'father_husband_name',
+            'id'    => 'father_husband_name',
             'class' => 'form-control input-sm',
-            'value' => $person_info->address_2
+            'value' => $person_info->father_husband_name ?? ''
         ]) ?>
     </div>
 </div>
+
+<div class="form-group form-group-sm">
+    <?= form_label(lang('Customers.mother_name'), 'mother_name', ['class' => 'control-label col-xs-3']) ?>
+    <div class="col-xs-8">
+        <?= form_input([
+            'name'  => 'mother_name',
+            'id'    => 'mother_name',
+            'class' => 'form-control input-sm',
+            'value' => $person_info->mother_name ?? ''
+        ]) ?>
+    </div>
+</div>
+
+<div class="form-group form-group-sm">
+    <?= form_label(lang('Customers.date_of_birth'), 'date_of_birth', ['class' => 'control-label col-xs-3']) ?>
+    <div class="col-xs-8">
+        <div class="input-group date" id="date_of_birth_datetimepicker">
+            <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-calendar"></span></span>
+            <?= form_input([
+                'name'  => 'date_of_birth',
+                'id'    => 'date_of_birth',
+                'class' => 'form-control input-sm',
+                'value' => $person_info->date_of_birth ?? '',
+                'placeholder' => 'DD-MM-YYYY'
+            ]) ?>
+        </div>
+    </div>
+</div>
+
+<div class="form-group form-group-sm">
+    <?= form_label(lang('Customers.national_id'), 'national_id', ['class' => 'control-label col-xs-3']) ?>
+    <div class="col-xs-8">
+        <?= form_input([
+            'name'  => 'national_id',
+            'id'    => 'national_id',
+            'class' => 'form-control input-sm',
+            'value' => $person_info->national_id ?? ''
+        ]) ?>
+    </div>
+</div>
+
 
 <div class="form-group form-group-sm">
     <?= form_label(lang('Common.gender'), 'gender', !empty($basic_version) ? ['class' => 'required control-label col-xs-3'] : ['class' => 'control-label col-xs-3']) ?>
@@ -62,6 +103,15 @@
                 'checked' => $person_info->gender === '0'
             ]) ?> <?= lang('Common.gender_female') ?>
         </label>
+        <label class="radio-inline">
+            <?= form_radio([
+                'name'    => 'gender',
+                'type'    => 'radio',
+                'id'      => 'gender',
+                'value'   => 2,
+                'checked' => $person_info->gender === '2'
+            ]) ?> <?= lang('Common.gender_other') ?>
+        </label>
 
     </div>
 </div>
@@ -82,7 +132,7 @@
 </div>
 
 <div class="form-group form-group-sm">
-    <?= form_label(lang('Common.phone_number'), 'phone_number', ['class' => 'control-label col-xs-3']) ?>
+    <?= form_label(lang('Common.phone_number'), 'phone_number', ['class' => 'required control-label col-xs-3']) ?>
     <div class="col-xs-8">
         <div class="input-group">
             <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
@@ -91,6 +141,21 @@
                 'id'    => 'phone_number',
                 'class' => 'form-control input-sm',
                 'value' => $person_info->phone_number
+            ]) ?>
+        </div>
+    </div>
+</div>
+
+<div class="form-group form-group-sm">
+    <?= form_label(lang('Customers.alt_phone_number'), 'alt_phone_number', ['class' => 'control-label col-xs-3']) ?>
+    <div class="col-xs-8">
+        <div class="input-group">
+            <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-phone-alt"></span></span>
+            <?= form_input([
+                'name'  => 'alt_phone_number',
+                'id'    => 'alt_phone_number',
+                'class' => 'form-control input-sm',
+                'value' => $person_info->alt_phone_number ?? ''
             ]) ?>
         </div>
     </div>
@@ -144,6 +209,19 @@
     </div>
 </div>
 
+
+<div class="form-group form-group-sm">
+    <?= form_label(lang('Common.country'), 'country', ['class' => 'control-label col-xs-3']) ?>
+    <div class="col-xs-8">
+        <?= form_input([
+            'name'  => 'country',
+            'id'    => 'country',
+            'class' => 'form-control input-sm',
+            'value' => $person_info->country
+        ]) ?>
+    </div>
+</div>
+
 <div class="form-group form-group-sm">
     <?= form_label(lang('Common.zip'), 'zip', ['class' => 'control-label col-xs-3']) ?>
     <div class="col-xs-8">
@@ -157,13 +235,13 @@
 </div>
 
 <div class="form-group form-group-sm">
-    <?= form_label(lang('Common.country'), 'country', ['class' => 'control-label col-xs-3']) ?>
+    <?= form_label(lang('Common.present_address'), 'present_address', ['class' => 'control-label col-xs-3']) ?>
     <div class="col-xs-8">
-        <?= form_input([
-            'name'  => 'country',
-            'id'    => 'country',
+        <?= form_textarea([
+            'name'  => 'present_address',
+            'id'    => 'present_address',
             'class' => 'form-control input-sm',
-            'value' => $person_info->country
+            'value' => $person_info->present_address ?? ''
         ]) ?>
     </div>
 </div>

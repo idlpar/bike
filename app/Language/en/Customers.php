@@ -50,7 +50,7 @@ return [
     "successful_deleted"            => "You have successfully deleted",
     "successful_updating"           => "You have successfully updated customer",
     "tax_code"                      => "Tax Code",
-    "tax_id"                        => "National ID",
+    "tax_id"                        => "Tax ID",
     "taxable"                       => "Taxable",
     "total"                         => "Total spent",
     "update"                        => "Update Customer",
@@ -65,4 +65,8 @@ return [
     "thana_upazilla"                => "Thana/Upazilla",
     "district"                      => "District",
     "present_address"               => "Present Address",
+    "mother_name"                   => "Mother's Name",
+    "date_of_birth"                 => "Date Of Birth",
+    "national_id"                   => "National ID",
+    "alt_phone_number"              => "Alternative Phone Number"
 ];

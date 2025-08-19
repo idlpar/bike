@@ -27,7 +27,8 @@ class Customer extends Person
         'points',
         'date',
         'employee_id',
-        'consent'
+        'consent',
+        'customer_type'
     ];
 
 

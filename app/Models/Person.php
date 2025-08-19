@@ -18,7 +18,12 @@ class Person extends Model
     protected $allowedFields = [
         'first_name',
         'last_name',
+        'father_husband_name',
+        'mother_name',
+        'date_of_birth',
+        'national_id',
         'phone_number',
+        'alt_phone_number',
         'email',
         'address_1',
         'address_2',

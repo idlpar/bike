@@ -92,4 +92,4 @@ $.fn.datetimepicker.dates['<?= $config['language'] ?>'] = {
     weekStart: <?= lang('Datepicker.weekstart') ?>
 };
 
-$(".datetime").datetimepicker(pickerconfig());
+$("#date").datetimepicker(pickerconfig());

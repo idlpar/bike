@@ -106,6 +106,7 @@ gulp.task('debug-js', function() {
         './node_modules/jquery-form/src/jquery.form.js',
         './node_modules/jquery-validation/dist/jquery.validate.js',
         './node_modules/jquery-ui-dist/jquery-ui.js',
+        
         './node_modules/bootstrap/dist/js/bootstrap.js',
         './node_modules/bootstrap3-dialog/dist/js/bootstrap-dialog.js',
         './node_modules/jasny-bootstrap/dist/js/jasny-bootstrap.js',
@@ -158,6 +159,7 @@ gulp.task('prod-js', function() {
         './node_modules/bootstrap-notify/bootstrap-notify.min.js',
         './node_modules/clipboard/dist/clipboard.min.js',
         './node_modules/jquery-form/dist/jquery.form.min.js',
+        './node_modules/jquery-ui-dist/jquery-ui.min.js',
         './node_modules/jquery-validation/dist/jquery.validate.min.js',
         './node_modules/bootstrap-datetime-picker/js/bootstrap-datetimepicker.min.js',
         './node_modules/es6-promise/dist/es6-promise.min.js',

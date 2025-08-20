@@ -219,10 +219,9 @@
                             <span class="input-group-addon input-sm"><span class="glyphicon glyphicon-calendar"></span></span>
                             <?= form_input([
                                 'name'     => 'date',
-                                'id'       => 'datetime',
+                                'id'       => 'date',
                                 'class'    => 'form-control input-sm',
-                                'value'    => to_datetime(strtotime($person_info->date)),
-                                'readonly' => 'true'
+                                'value'    => to_date(strtotime($person_info->date))
                             ]) ?>
                         </div>
                     </div>
@@ -573,10 +572,6 @@
         $('input[name="customer_type"]').change(toggleCompanyName);
         toggleCompanyName(); // Initial call on load
 
-        // Initialize date picker for Date of Birth
-        // Initialize date picker for Date of Birth (jQuery UI Datepicker)
-        $('#date_of_birth').datetimepicker({
-            format: 'DD-MM-YYYY',
-        });
+        <?= view('partial/datepicker_locale') ?>
     });
 </script>

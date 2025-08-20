@@ -405,6 +405,7 @@ function item_headers(): array
         ['category'      => lang('Items.category')],
         ['color'         => lang('Items.color')],
         ['company_name'  => lang('Suppliers.company_name')],
+        ['tr_price'      => lang('Items.tr_price')],
         ['cost_price'    => lang('Items.cost_price')],
         ['unit_price'    => lang('Items.unit_price')],
         ['quantity'      => lang('Items.quantity')]
@@ -497,6 +498,7 @@ function get_item_data_row(object $item): array
         'name'          => $item->name,
         'category'      => $item->category,
         'company_name'  => $item->company_name,    // TODO: This isn't in the items table. Should this be here?
+        'tr_price'      => to_currency($item->tr_price),
         'cost_price'    => to_currency($item->cost_price),
         'unit_price'    => to_currency($item->unit_price),
         'quantity'      => to_quantity_decimals($item->quantity),

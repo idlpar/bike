@@ -15,38 +15,38 @@ class AddNewItemColumnsToItemsTable extends Migration
                 'null' => true,
             ],
             'year_of_manufacture' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'horse_power' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'rpm' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'cubic_capacity' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'wheel_base' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'unladen_weight_kg' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'max_laden_train_weight_kg' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'size_of_tyre' => [
@@ -60,8 +60,8 @@ class AddNewItemColumnsToItemsTable extends Migration
                 'null' => true,
             ],
             'number_of_cylinders' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'fuel_used' => [
@@ -70,18 +70,18 @@ class AddNewItemColumnsToItemsTable extends Migration
                 'null' => true,
             ],
             'fuel_tank_capacity' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'seats_incl_driver' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
             'tr_price' => [
-                'type' => 'DECIMAL',
-                'constraint' => '15,2',
+                'type' => 'VARCHAR',
+                'constraint' => '255',
                 'null' => true,
             ],
         ]);

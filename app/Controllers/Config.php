@@ -422,13 +422,27 @@ class Config extends Secure_Controller
         $save_number_locale = $this->request->getPost('save_number_locale');
 
         $fmt = new NumberFormatter($number_locale, NumberFormatter::CURRENCY);
-        if ($number_locale != $save_number_locale) {
-            $currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-            $currency_code = $fmt->getTextAttribute(NumberFormatter::CURRENCY_CODE);
-            $save_number_locale = $number_locale;
+        // Prioritize the user's input for currency_symbol if it's not empty
+        $posted_currency_symbol = $this->request->getPost('currency_symbol');
+        if (!empty($posted_currency_symbol)) {
+            $currency_symbol = $posted_currency_symbol;
         } else {
-            $currency_symbol = empty($this->request->getPost('currency_symbol')) ? $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL) : $this->request->getPost('currency_symbol');
-            $currency_code = empty($this->request->getPost('currency_code')) ? $fmt->getTextAttribute(NumberFormatter::CURRENCY_CODE) : $this->request->getPost('currency_code');
+            // If user input is empty, derive from NumberFormatter based on locale
+            $currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+        }
+
+        // Prioritize the user's input for currency_code if it's not empty
+        $posted_currency_code = $this->request->getPost('currency_code');
+        if (!empty($posted_currency_code)) {
+            $currency_code = $posted_currency_code;
+        } else {
+            // If user input is empty, derive from NumberFormatter based on locale
+            $currency_code = $fmt->getTextAttribute(NumberFormatter::CURRENCY_CODE);
+        }
+
+        // Update save_number_locale if the number_locale has changed
+        if ($number_locale != $save_number_locale) {
+            $save_number_locale = $number_locale;
         }
 
         if ($this->request->getPost('thousands_separator') == 'false') {

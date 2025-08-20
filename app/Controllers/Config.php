@@ -422,6 +422,15 @@ class Config extends Secure_Controller
         $save_number_locale = $this->request->getPost('save_number_locale');
 
         $fmt = new NumberFormatter($number_locale, NumberFormatter::CURRENCY);
+
+        // If en_BD is selected, force 2 decimal places
+        if ($number_locale === 'en_BD') {
+            $fmt->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 2);
+            $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
+        }
+
+        // If en_IN is selected, force Western numbering format
+        
         // Prioritize the user's input for currency_symbol if it's not empty
         $posted_currency_symbol = $this->request->getPost('currency_symbol');
         if (!empty($posted_currency_symbol)) {

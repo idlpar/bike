@@ -388,6 +388,17 @@ class Customer extends Person
         return $suggestions;
     }
 
+    public function get_collection_amount(int $person_id): float
+    {
+        $builder = $this->db->table('sales');
+        $builder->join('sales_payments', 'sales.sale_id = sales_payments.sale_id');
+        $builder->where('sales.customer_id', $person_id);
+        $builder->selectSum('sales_payments.payment_amount', 'collection');
+        $result = $builder->get()->getRow();
+
+        return $result ? (float)$result->collection : 0.0;
+    }
+
     /**
      * Gets rows
      */

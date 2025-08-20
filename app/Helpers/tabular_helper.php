@@ -255,11 +255,15 @@ function customer_headers(): array
 {
     return [
         ['people.person_id' => lang('Common.id')],
-        ['last_name'        => lang('Common.last_name')],
-        ['first_name'       => lang('Common.first_name')],
-        ['email'            => lang('Common.email')],
+        ['name'             => lang('Common.name')],
+        ['address'          => lang('Common.address'), 'escape' => false],
+        ['details'          => lang('Common.details')],
         ['phone_number'     => lang('Common.phone_number')],
-        ['total'            => lang('Common.total_spent'), 'sortable' => false]
+        ['due'              => lang('Common.due')],
+        ['advance_deposit'  => lang('Common.advance_deposit')],
+        ['total'            => lang('Common.total_spent'), 'sortable' => false],
+        ['collection'       => lang('Common.collection')],
+        ['messages'         => '', 'sortable' => false]
     ];
 }
 
@@ -286,14 +290,19 @@ function get_customer_manage_table_headers(): string
 function get_customer_data_row(object $person, object $stats): array
 {
     $controller = get_controller();
+    $customer_model = model(App\Models\Customer::class);
+    $collection = $customer_model->get_collection_amount($person->person_id);
 
     return [
         'people.person_id' => $person->person_id,
-        'last_name'        => $person->last_name,
-        'first_name'       => $person->first_name,
-        'email'            => empty($person->email) ? '' : mailto($person->email, $person->email),
+        'name'             => $person->first_name . ' ' . $person->last_name,
+        'address'          => "<b>Vill:</b> {$person->address_1}, <b>PO:</b> {$person->address_2}, <b>PS:</b> {$person->city}, <b>Dis:</b> {$person->state}, <b>Div:</b> {$person->country}, <b>PC:</b> {$person->zip}",
+        'details'          => $person->comments,
         'phone_number'     => $person->phone_number,
+        'due'              => to_currency($stats->total - $collection),
+        'advance_deposit'  => to_currency($person->discount),
         'total'            => to_currency($stats->total),
+        'collection'       => to_currency($collection),
         'messages'         => empty($person->phone_number)
             ? ''
             : anchor(

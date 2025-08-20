@@ -209,10 +209,25 @@ CREATE TABLE `ospos_items` (
     `custom8` VARCHAR(25) NOT NULL,
     `custom9` VARCHAR(25) NOT NULL,
     `custom10` VARCHAR(25) NOT NULL,
+    `color` varchar(255) DEFAULT NULL,
+    `year_of_manufacture` int(11) DEFAULT NULL,
+    `horse_power` decimal(15,2) DEFAULT NULL,
+    `rpm` int(11) DEFAULT NULL,
+    `cubic_capacity` decimal(15,2) DEFAULT NULL,
+    `wheel_base` decimal(15,2) DEFAULT NULL,
+    `unladen_weight_kg` decimal(15,2) DEFAULT NULL,
+    `max_laden_train_weight_kg` decimal(15,2) DEFAULT NULL,
+    `size_of_tyre` varchar(255) DEFAULT NULL,
+    `bike_label` varchar(255) DEFAULT NULL,
+    `number_of_cylinders` int(11) DEFAULT NULL,
+    `fuel_used` varchar(255) DEFAULT NULL,
+    `fuel_tank_capacity` decimal(15,2) DEFAULT NULL,
+    `seats_incl_driver` int(11) DEFAULT NULL,
+    `tr_price` decimal(15,2) DEFAULT NULL,
     PRIMARY KEY (`item_id`),
     UNIQUE KEY `item_number` (`item_number`),
     KEY `supplier_id` (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8  ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ospos_items`

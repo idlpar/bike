@@ -40,7 +40,22 @@ class Item extends Model
         'qty_per_pack',
         'pack_name',
         'low_sell_item_id',
-        'hsn_code'
+        'hsn_code',
+        'color',
+        'year_of_manufacture',
+        'horse_power',
+        'rpm',
+        'cubic_capacity',
+        'wheel_base',
+        'unladen_weight_kg',
+        'max_laden_train_weight_kg',
+        'size_of_tyre',
+        'bike_label',
+        'number_of_cylinders',
+        'fuel_used',
+        'fuel_tank_capacity',
+        'seats_incl_driver',
+        'tr_price'
     ];
 
 

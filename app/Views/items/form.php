@@ -448,6 +448,188 @@
             </div>
         </div>
 
+        <!-- New fields start here -->
+        <div class="form-group form-group-sm">
+            <?= form_label('Color', 'color', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'color',
+                    'id'    => 'color',
+                    'class' => 'form-control input-sm',
+                    'value' => $item_info->color ?? ''
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Year of Manufacture', 'year_of_manufacture', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'year_of_manufacture',
+                    'id'    => 'year_of_manufacture',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->year_of_manufacture == 0) ? '' : $item_info->year_of_manufacture
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Horse Power', 'horse_power', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'horse_power',
+                    'id'    => 'horse_power',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->horse_power == 0) ? '' : $item_info->horse_power
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('RPM', 'rpm', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'rpm',
+                    'id'    => 'rpm',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->rpm == 0) ? '' : $item_info->rpm
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Cubic Capacity', 'cubic_capacity', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'cubic_capacity',
+                    'id'    => 'cubic_capacity',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->cubic_capacity == 0) ? '' : $item_info->cubic_capacity
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Wheel Base', 'wheel_base', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'wheel_base',
+                    'id'    => 'wheel_base',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->wheel_base == 0) ? '' : $item_info->wheel_base
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Unladen Weight(kg)', 'unladen_weight_kg', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'unladen_weight_kg',
+                    'id'    => 'unladen_weight_kg',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->unladen_weight_kg == 0) ? '' : $item_info->unladen_weight_kg
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Maximum laden/train weight(kg)', 'max_laden_train_weight_kg', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'max_laden_train_weight_kg',
+                    'id'    => 'max_laden_train_weight_kg',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->max_laden_train_weight_kg == 0) ? '' : $item_info->max_laden_train_weight_kg
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Size of Tyre', 'size_of_tyre', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'size_of_tyre',
+                    'id'    => 'size_of_tyre',
+                    'class' => 'form-control input-sm',
+                    'value' => $item_info->size_of_tyre ?? ''
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Bike Label', 'bike_label', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'bike_label',
+                    'id'    => 'bike_label',
+                    'class' => 'form-control input-sm',
+                    'value' => $item_info->bike_label ?? ''
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Number of Cylinders', 'number_of_cylinders', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'number_of_cylinders',
+                    'id'    => 'number_of_cylinders',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->number_of_cylinders == 0) ? '' : $item_info->number_of_cylinders
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Fuel Used', 'fuel_used', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'fuel_used',
+                    'id'    => 'fuel_used',
+                    'class' => 'form-control input-sm',
+                    'value' => $item_info->fuel_used ?? ''
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Fuel Tank Capacity', 'fuel_tank_capacity', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'fuel_tank_capacity',
+                    'id'    => 'fuel_tank_capacity',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->fuel_tank_capacity == 0) ? '' : $item_info->fuel_tank_capacity
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('Seats (incl. driver)', 'seats_incl_driver', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'seats_incl_driver',
+                    'id'    => 'seats_incl_driver',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->seats_incl_driver == 0) ? '' : $item_info->seats_incl_driver
+                ]) ?>
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <?= form_label('TR Price', 'tr_price', ['class' => 'control-label col-xs-3']) ?>
+            <div class="col-xs-8">
+                <?= form_input([
+                    'name'  => 'tr_price',
+                    'id'    => 'tr_price',
+                    'class' => 'form-control input-sm',
+                    'value' => ($item_info->tr_price == 0) ? '' : $item_info->tr_price
+                ]) ?>
+            </div>
+        </div>
+        <!-- New fields end here -->
+
     </fieldset>
 <?= form_close() ?>
 

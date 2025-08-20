@@ -401,6 +401,7 @@ function item_headers(): array
     return [
         ['items.item_id' => lang('Common.id')],
         ['item_number'   => lang('Items.item_number')],
+        ['color'         => lang('Items.color')],
         ['name'          => lang('Items.name')],
         ['category'      => lang('Items.category')],
         ['company_name'  => lang('Suppliers.company_name')],
@@ -492,6 +493,7 @@ function get_item_data_row(object $item): array
     $columns = [
         'items.item_id' => $item->item_id,
         'item_number'   => $item->item_number,
+        'color'         => $item->color,
         'name'          => $item->name,
         'category'      => $item->category,
         'company_name'  => $item->company_name,    // TODO: This isn't in the items table. Should this be here?

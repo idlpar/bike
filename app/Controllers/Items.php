@@ -626,7 +626,22 @@ class Items extends Secure_Controller
             'pack_name'             => $this->request->getPost('pack_name') == null ? $default_pack_name : $this->request->getPost('pack_name'),
             'low_sell_item_id'      => $this->request->getPost('low_sell_item_id') === null ? $item_id : intval($this->request->getPost('low_sell_item_id')),
             'deleted'               => $this->request->getPost('is_deleted') != null,
-            'hsn_code'              => $this->request->getPost('hsn_code') === null ? '' : $this->request->getPost('hsn_code')
+            'hsn_code'              => $this->request->getPost('hsn_code') === null ? '' : $this->request->getPost('hsn_code'),
+            'color'                 => empty($this->request->getPost('color')) ? null : $this->request->getPost('color'),
+            'year_of_manufacture'   => (trim($this->request->getPost('year_of_manufacture')) === '' || !is_numeric($this->request->getPost('year_of_manufacture'))) ? null : (int)$this->request->getPost('year_of_manufacture'),
+            'horse_power'           => empty($this->request->getPost('horse_power')) ? null : $this->request->getPost('horse_power'),
+            'rpm'                   => empty($this->request->getPost('rpm')) ? null : $this->request->getPost('rpm'),
+            'cubic_capacity'        => empty($this->request->getPost('cubic_capacity')) ? null : $this->request->getPost('cubic_capacity'),
+            'wheel_base'            => empty($this->request->getPost('wheel_base')) ? null : $this->request->getPost('wheel_base'),
+            'unladen_weight_kg'     => empty($this->request->getPost('unladen_weight_kg')) ? null : $this->request->getPost('unladen_weight_kg'),
+            'max_laden_train_weight_kg' => empty($this->request->getPost('max_laden_train_weight_kg')) ? null : $this->request->getPost('max_laden_train_weight_kg'),
+            'size_of_tyre'          => empty($this->request->getPost('size_of_tyre')) ? null : $this->request->getPost('size_of_tyre'),
+            'bike_label'            => empty($this->request->getPost('bike_label')) ? null : $this->request->getPost('bike_label'),
+            'number_of_cylinders'   => empty($this->request->getPost('number_of_cylinders')) ? null : $this->request->getPost('number_of_cylinders'),
+            'fuel_used'             => empty($this->request->getPost('fuel_used')) ? null : $this->request->getPost('fuel_used'),
+            'fuel_tank_capacity'    => empty($this->request->getPost('fuel_tank_capacity')) ? null : $this->request->getPost('fuel_tank_capacity'),
+            'seats_incl_driver'     => empty($this->request->getPost('seats_incl_driver')) ? null : $this->request->getPost('seats_incl_driver'),
+            'tr_price'              => empty($this->request->getPost('tr_price')) ? null : $this->request->getPost('tr_price')
         ];
 
         if ($item_data['item_type'] == ITEM_TEMP) {

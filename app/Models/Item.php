@@ -175,6 +175,21 @@ class Item extends Model
             $builder->select('MAX(items.pack_name) AS pack_name');
             $builder->select('MAX(items.tax_category_id) AS tax_category_id');
             $builder->select('MAX(items.deleted) AS deleted');
+            $builder->select('MAX(items.color) AS color');
+            $builder->select('MAX(items.year_of_manufacture) AS year_of_manufacture');
+            $builder->select('MAX(items.horse_power) AS horse_power');
+            $builder->select('MAX(items.rpm) AS rpm');
+            $builder->select('MAX(items.cubic_capacity) AS cubic_capacity');
+            $builder->select('MAX(items.wheel_base) AS wheel_base');
+            $builder->select('MAX(items.unladen_weight_kg) AS unladen_weight_kg');
+            $builder->select('MAX(items.max_laden_train_weight_kg) AS max_laden_train_weight_kg');
+            $builder->select('MAX(items.size_of_tyre) AS size_of_tyre');
+            $builder->select('MAX(items.bike_label) AS bike_label');
+            $builder->select('MAX(items.number_of_cylinders) AS number_of_cylinders');
+            $builder->select('MAX(items.fuel_used) AS fuel_used');
+            $builder->select('MAX(items.fuel_tank_capacity) AS fuel_tank_capacity');
+            $builder->select('MAX(items.seats_incl_driver) AS seats_incl_driver');
+            $builder->select('MAX(items.tr_price) AS tr_price');
 
             $builder->select('MAX(suppliers.person_id) AS person_id');
             $builder->select('MAX(suppliers.company_name) AS company_name');

@@ -401,9 +401,9 @@ function item_headers(): array
     return [
         ['items.item_id' => lang('Common.id')],
         ['item_number'   => lang('Items.item_number')],
-        ['color'         => lang('Items.color')],
         ['name'          => lang('Items.name')],
         ['category'      => lang('Items.category')],
+        ['color'         => lang('Items.color')],
         ['company_name'  => lang('Suppliers.company_name')],
         ['cost_price'    => lang('Items.cost_price')],
         ['unit_price'    => lang('Items.unit_price')],

@@ -611,11 +611,18 @@ class Sale extends Model
                 'item_cost_price'    => $item_data['cost_price'],
                 'item_unit_price'    => $item_data['price'],
                 'item_location'      => $item_data['item_location'],
-                'print_option'       => $item_data['print_option']
+                'print_option'       => $item_data['print_option'],
+                'chassis_number'     => $item_data['chassis_number'],
+                'engine_number'      => $item_data['engine_number']
             ];
 
             $builder = $this->db->table('sales_items');
             $builder->insert($sales_items_data);
+
+            if ($item_data['is_serialized']) {
+                $receiving_items_serials = model(Receiving_items_serials::class);
+                $receiving_items_serials->mark_as_sold($item_data['chassis_number'], $item_data['engine_number']);
+            }
 
             if ($cur_item_info->stock_type == HAS_STOCK && $sale_status == COMPLETED) {    // TODO: === ?
                 // Update stock quantity if item type is a standard stock item and the sale is a standard sale

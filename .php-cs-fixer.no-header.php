@@ -25,7 +25,6 @@ $finder = Finder::create()
     ])
     ->exclude(['Views/errors/html'])
     ->append([
-        __DIR__ . '/admin/starter/builds',
     ]);
 
 $overrides = [

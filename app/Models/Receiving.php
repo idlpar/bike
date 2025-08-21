@@ -129,6 +129,7 @@ class Receiving extends Model
         $receiving_id = $this->db->insertID();
 
         $builder = $this->db->table('receivings_items');
+        $serials_builder = $this->db->table('receiving_items_serials');
 
         foreach ($items as $line => $item_data) {
             $config = config(OSPOS::class)->settings;
@@ -146,10 +147,26 @@ class Receiving extends Model
                 'discount_type'      => $item_data['discount_type'],
                 'item_cost_price'    => $cur_item_info->cost_price,
                 'item_unit_price'    => $item_data['price'],
+                'selling_price'      => $item_data['selling_price'], // New field
                 'item_location'      => $item_data['item_location']
             ];
 
             $builder->insert($receivings_items_data);
+            $receiving_item_id = $this->db->insertID();
+
+            if (isset($item_data['chassis_numbers']) && isset($item_data['engine_numbers'])) {
+                $chassis_numbers = $item_data['chassis_numbers'];
+                $engine_numbers = $item_data['engine_numbers'];
+
+                for ($i = 0; $i < count($chassis_numbers); $i++) {
+                    $serials_data = [
+                        'receiving_item_id' => $receiving_item_id,
+                        'chassis_number'    => $chassis_numbers[$i],
+                        'engine_number'     => $engine_numbers[$i]
+                    ];
+                    $serials_builder->insert($serials_data);
+                }
+            }
 
             $items_received = $item_data['receiving_quantity'] != 0 ? $item_data['quantity'] * $item_data['receiving_quantity'] : $item_data['quantity'];
 

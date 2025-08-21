@@ -124,6 +124,8 @@ helper('url');
                 <li class="pull-left">
                     <?= form_input(['name' => 'item', 'id' => 'item', 'class' => 'form-control input-sm', 'size' => '50', 'tabindex' => ++$tabindex]) ?>
                     <span class="ui-helper-hidden-accessible" role="status"></span>
+                    <input type="hidden" id="item_id" name="item_id">
+                    <input type="hidden" id="price" name="price">
                 </li>
                 <li class="pull-right">
                     <button id="new_item_button" class="btn btn-info btn-sm pull-right modal-dlg" data-btn-new="<?= lang('Common.new') ?>" data-btn-submit="<?= lang('Common.submit') ?>" data-href="<?= "items/view" ?>" title="<?= lang(ucfirst($controller_name) . ".new_item") ?>">
@@ -564,6 +566,36 @@ helper('url');
     </div>
 </div>
 
+<div class="modal" id="serial-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Serials</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Chassis Number</th>
+                            <th>Engine Number</th>
+                        </tr>
+                    </thead>
+                    <tbody id="serial-modal-body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="add-selected-serials">Add Selected</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     $(document).ready(function() {
         const redirect = function() {
@@ -807,6 +839,44 @@ helper('url');
             var input = $('<input>').attr('type', 'hidden').attr('name', 'discount_type').val(($(this).prop('checked')) ? 1 : 0);
             $('#cart_' + $(this).attr('data-line')).append($(input));
             $('#cart_' + $(this).attr('data-line')).submit();
+        });
+
+        <?php if (isset($serials)) { ?>
+            var serials = <?= json_encode($serials) ?>;
+            var modal_body = $("#serial-modal-body");
+            modal_body.empty();
+            for (var i = 0; i < serials.length; i++) {
+                var row = "<tr>" +
+                    "<td><input type='checkbox' class='serial-checkbox' data-chassis='" + serials[i].chassis_number + "' data-engine='" + serials[i].engine_number + "'></td>" +
+                    "<td>" + serials[i].chassis_number + "</td>" +
+                    "<td>" + serials[i].engine_number + "</td>" +
+                    "</tr>";
+                modal_body.append(row);
+            }
+            $("#serial-modal").modal('show');
+        <?php } ?>
+
+        $("#add-selected-serials").on("click", function() {
+            var selected_serials = [];
+            $(".serial-checkbox:checked").each(function() {
+                selected_serials.push({
+                    chassis_number: $(this).data('chassis'),
+                    engine_number: $(this).data('engine')
+                });
+            });
+
+            if (selected_serials.length > 0) {
+                $.post('<?= site_url("$controller_name/addSerializedItem") ?>', {
+                    item_id: $("#item_id").val(),
+                    serials: selected_serials,
+                    price: $("#price").val()
+                }, function() {
+                    $("#serial-modal").modal('hide');
+                    window.location.reload();
+                });
+            } else {
+                alert("Please select at least one serial.");
+            }
         });
     });
 

@@ -110,6 +110,7 @@ if (isset($success)) {
                 <th style="width: 15%;"><?= lang('Sales.item_number') ?></th>
                 <th style="width: 23%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.cost') ?></th>
+                <th style="width: 10%;">Sale Price</th>
                 <th style="width: 8%;"><?= lang(ucfirst($controller_name) . '.quantity') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.ship_pack') ?></th>
                 <th style="width: 14%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
@@ -147,6 +148,14 @@ if (isset($success)) {
                                     'name'    => 'price',
                                     'class'   => 'form-control input-sm',
                                     'value'   => to_currency_no_money($item['price']),
+                                    'onClick' => 'this.select();'
+                                ]) ?>
+                            </td>
+                            <td>
+                                <?= form_input([
+                                    'name'    => 'selling_price',
+                                    'class'   => 'form-control input-sm',
+                                    'value'   => to_currency_no_money($item['selling_price'] ?? 0),
                                     'onClick' => 'this.select();'
                                 ]) ?>
                             </td>
@@ -228,6 +237,21 @@ if (isset($success)) {
                         </td>
                         <td colspan="7"></td>
                     </tr>
+
+                    <?php if ($item['allow_alt_description'] == 1 && $item['is_serialized'] == 1) { ?>
+                        <tr>
+                            <td colspan="9">
+                                <div class="chassis_engine_container">
+                                    <div class="chassis_engine_row">
+                                        <input type="text" class="form-control input-sm chassis_number" placeholder="Chassis Number">
+                                        <input type="text" class="form-control input-sm engine_number" placeholder="Engine Number">
+                                        <button class="btn btn-primary btn-sm add_chassis_engine">Add</button>
+                                    </div>
+                                    <div class="added_chassis_engine"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php } ?>
 
                     <?= form_close() ?>
 
@@ -536,6 +560,48 @@ if (isset($success)) {
             var input = $("<input>").attr("type", "hidden").attr("name", "discount_type").val(($(this).prop('checked')) ? 1 : 0);
             $('#cart_' + $(this).attr('data-line')).append($(input));
             $('#cart_' + $(this).attr('data-line')).submit();
+        });
+
+        $(".add_chassis_engine").on("click", function() {
+            var container = $(this).closest(".chassis_engine_container");
+            var chassis_number = container.find(".chassis_number").val().trim();
+            var engine_number = container.find(".engine_number").val().trim();
+            var quantity = parseInt($(this).closest("tr").prev().prev().find("input[name='quantity']").val());
+            var added_items_count = container.find(".added_chassis_engine .added_row").length;
+
+            if (chassis_number !== "" && engine_number !== "") {
+                if (added_items_count < quantity) {
+                    var new_row = "<div class='added_row' style='display: flex; align-items: center; margin-bottom: 5px;'>" +
+                        "<span style='margin-right: 10px;'>Chassis: " + chassis_number + ", Engine: " + engine_number + "</span>" +
+                        "<a href='#' class='btn btn-danger btn-xs remove_chassis_engine'><span class='glyphicon glyphicon-trash'></span></a>" +
+                        "<input type='hidden' name='chassis_numbers[]' value='" + chassis_number + "'>" +
+                        "<input type='hidden' name='engine_numbers[]' value='" + engine_number + "'>" +
+                        "</div>";
+
+                    container.find(".added_chassis_engine").append(new_row);
+                    container.find(".chassis_number").val("");
+                    container.find(".engine_number").val("");
+
+                    if (added_items_count + 1 === quantity) {
+                        container.find(".chassis_engine_row").hide();
+                    }
+                } else {
+                    alert("You have already added the maximum quantity of items.");
+                }
+            } else {
+                alert("Please enter both Chassis and Engine numbers.");
+            }
+        });
+
+        $(document).on("click", ".remove_chassis_engine", function(e) {
+            e.preventDefault();
+            var container = $(this).closest(".chassis_engine_container");
+            $(this).parent().remove();
+            var added_items_count = container.find(".added_chassis_engine .added_row").length;
+            var quantity = parseInt(container.closest("tr").prev().prev().find("input[name='quantity']").val());
+            if (added_items_count < quantity) {
+                container.find(".chassis_engine_row").show();
+            }
         });
 
     });

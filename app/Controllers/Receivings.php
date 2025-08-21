@@ -216,13 +216,17 @@ class Receivings extends Secure_Controller
 
         $receiving_quantity = filter_var($raw_receiving_quantity, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
+        $selling_price = parse_decimals($this->request->getPost('selling_price'));
+        $chassis_numbers = $this->request->getPost('chassis_numbers');
+        $engine_numbers = $this->request->getPost('engine_numbers');
+
         if ($this->validate($validation_rule)) {
-            $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $receiving_quantity);
+            $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $receiving_quantity, $selling_price, $chassis_numbers, $engine_numbers);
         } else {
             $data['error'] = lang('Receivings.error_editing_item');
         }
 
-        $this->_reload($data);    // TODO: Hungarian notation
+        $this->_reload($data);
     }
 
     /**

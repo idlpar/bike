@@ -543,10 +543,15 @@ class Sales extends Secure_Controller
                 $data['warning'] = $stock_warning;
             }
         } else {
-            if ($item_id_or_number_or_item_kit_or_receipt == '' || !$this->sale_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, $price)) {
-                $data['error'] = lang('Sales.unable_to_add_item');
+            $item_info = $this->item->get_info($item_id_or_number_or_item_kit_or_receipt);
+            if ($item_info->is_serialized) {
+                $data['serials'] = $this->get_available_serials_for_item($item_info->item_id);
             } else {
-                $data['warning'] = $this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt, $item_location);
+                if ($item_id_or_number_or_item_kit_or_receipt == '' || !$this->sale_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, $price)) {
+                    $data['error'] = lang('Sales.unable_to_add_item');
+                } else {
+                    $data['warning'] = $this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt, $item_location);
+                }
             }
         }
 
@@ -1690,5 +1695,47 @@ class Sales extends Secure_Controller
         }
 
         return null;
+    }
+
+    public function get_available_serials_for_item($item_id)
+    {
+        $receiving_items_serials = model(Receiving_items_serials::class);
+        $serials = $receiving_items_serials->get_available_serials($item_id);
+        echo json_encode($serials);
+    }
+
+    public function postAddSerializedItem(): void
+    {
+        $data = [];
+
+        $discount = $this->config['default_sales_discount'];
+        $discount_type = $this->config['default_sales_discount_type'];
+
+        // Check if any discount is assigned to the selected customer
+        $customer_id = $this->sale_lib->get_customer();
+        if ($customer_id != NEW_ENTRY) {
+            // Load the customer discount if any
+            $customer_discount = $this->customer->get_info($customer_id)->discount;
+            $customer_discount_type = $this->customer->get_info($customer_id)->discount_type;
+            if ($customer_discount != '') {
+                $discount = $customer_discount;
+                $discount_type = $customer_discount_type;
+            }
+        }
+
+        $item_id = $this->request->getPost('item_id');
+        $serials = $this->request->getPost('serials');
+        $item_location = $this->sale_lib->get_sale_location();
+        $price = $this->request->getPost('price');
+
+        foreach ($serials as $serial) {
+            if (!$this->sale_lib->add_item($item_id, $item_location, 1, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, $price, null, null, null, false, null, null, $serial['chassis_number'], $serial['engine_number'])) {
+                $data['error'] = lang('Sales.unable_to_add_item');
+            } else {
+                $data['warning'] = $this->sale_lib->out_of_stock($item_id, $item_location);
+            }
+        }
+
+        $this->_reload($data);
     }
 }

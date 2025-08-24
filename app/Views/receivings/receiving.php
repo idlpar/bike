@@ -242,11 +242,11 @@ if (isset($success)) {
                         <tr>
                             <td colspan="9">
                                 <div class="chassis_engine_container">
-                                    <div class="chassis_engine_row">
-                                        <input type="text" class="form-control input-sm chassis_number" placeholder="Chassis Number">
-                                        <input type="text" class="form-control input-sm engine_number" placeholder="Engine Number">
-                                        <button class="btn btn-primary btn-sm add_chassis_engine">Add</button>
-                                    </div>
+                                    <div class="chassis_engine_row" style="display: flex; gap: 10px;">
+                                    <input type="text" class="form-control input-sm chassis_number" placeholder="Chassis Number" style="flex: 1;">
+                                    <input type="text" class="form-control input-sm engine_number" placeholder="Engine Number" style="flex: 1;">
+                                    <button class="btn btn-primary btn-sm add_chassis_engine">Add More</button>
+                                </div>
                                     <div class="added_chassis_engine"></div>
                                 </div>
                             </td>

@@ -611,9 +611,7 @@ class Sale extends Model
                 'item_cost_price'    => $item_data['cost_price'],
                 'item_unit_price'    => $item_data['price'],
                 'item_location'      => $item_data['item_location'],
-                'print_option'       => $item_data['print_option'],
-                'chassis_number'     => $item_data['chassis_number'],
-                'engine_number'      => $item_data['engine_number']
+                'print_option'       => $item_data['print_option']
             ];
 
             $builder = $this->db->table('sales_items');
@@ -676,7 +674,11 @@ class Sale extends Model
 
         $this->db->transComplete();
 
-        return $this->db->transStatus() ? $sale_id : -1;
+        if (!$this->db->transStatus()) {
+            throw new \RuntimeException('Sale transaction failed.');
+        }
+
+        return $sale_id;
     }
 
     /**

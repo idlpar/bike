@@ -145,8 +145,8 @@ class Receiving extends Model
                 'receiving_quantity' => $item_data['receiving_quantity'],
                 'discount'           => $item_data['discount'],
                 'discount_type'      => $item_data['discount_type'],
-                'item_cost_price'    => $cur_item_info->cost_price,
-                'item_unit_price'    => $item_data['price'],
+                'item_cost_price'    => $item_data['price'],
+                'item_unit_price'    => $item_data['unit_price'],
                 'item_location'      => $item_data['item_location']
             ];
 
@@ -172,6 +172,11 @@ class Receiving extends Model
             // Update cost price, if changed AND is set in config as wanted
             if ($cur_item_info->cost_price != $item_data['price'] && $config['receiving_calculate_average_price']) {
                 $item->change_cost_price($item_data['item_id'], $items_received, $item_data['price'], $cur_item_info->cost_price);
+            }
+
+            if ($cur_item_info->unit_price != $item_data['unit_price']) {
+                $item_data_for_save = ['unit_price' => $item_data['unit_price']];
+                $item->save_value($item_data_for_save, $item_data['item_id']);
             }
 
             // Update stock quantity

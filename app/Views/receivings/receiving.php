@@ -108,11 +108,12 @@ if (isset($success)) {
             <tr>
                 <th style="width: 5%;"><?= lang('Common.delete') ?></th>
                 <th style="width: 15%;"><?= lang('Sales.item_number') ?></th>
-                <th style="width: 23%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
+                <th style="width: 20%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.cost') ?></th>
+                <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.sale_price') ?></th>
                 <th style="width: 8%;"><?= lang(ucfirst($controller_name) . '.quantity') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.ship_pack') ?></th>
-                <th style="width: 14%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
+                <th style="width: 12%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.total') ?></th>
                 <th style="width: 5%;"><?= lang(ucfirst($controller_name) . '.update') ?></th>
             </tr>
@@ -121,7 +122,7 @@ if (isset($success)) {
         <tbody id="cart_contents">
             <?php if (count($cart) == 0) { ?>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="10">
                         <div class="alert alert-dismissible alert-info"><?= lang('Sales.no_items_in_cart') ?></div>
                     </td>
                 </tr>
@@ -150,11 +151,22 @@ if (isset($success)) {
                                     'onClick' => 'this.select();'
                                 ]) ?>
                             </td>
-                            
+                            <td>
+                                <?= form_input([
+                                    'name'    => 'unit_price',
+                                    'class'   => 'form-control input-sm',
+                                    'value'   => to_currency_no_money($item['unit_price'] ?? 0),
+                                    'onClick' => 'this.select();'
+                                ]) ?>
+                            </td>
                         <?php } else { ?>
                             <td>
                                 <?= $item['price'] ?>
                                 <?= form_hidden('price', to_currency_no_money($item['price'])) ?>
+                            </td>
+                             <td>
+                                <?= to_currency_no_money($item['unit_price'] ?? 0) ?>
+                                <?= form_hidden('unit_price', to_currency_no_money($item['unit_price'] ?? 0)) ?>
                             </td>
                         <?php } ?>
 
@@ -544,7 +556,7 @@ if (isset($success)) {
             }
         }
 
-        $('[name="price"],[name="quantity"],[name="receiving_quantity"],[name="discount"],[name="description"],[name="serialnumber"]').change(function() {
+        $('[name="price"],[name="unit_price"],[name="quantity"],[name="receiving_quantity"],[name="discount"],[name="description"],[name="serialnumber"]').change(function() {
             $(this).parents("tr").prevAll("form:first").submit()
         });
 

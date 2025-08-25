@@ -199,11 +199,13 @@ class Receivings extends Secure_Controller
 
         $validation_rule = [
             'price'    => 'trim|required|decimal_locale',
+            'unit_price' => 'trim|required|decimal_locale',
             'quantity' => 'trim|required|decimal_locale',
             'discount' => 'trim|permit_empty|decimal_locale',
         ];
 
         $price = parse_decimals($this->request->getPost('price'));
+        $unit_price = parse_decimals($this->request->getPost('unit_price'));
         $quantity = parse_quantity($this->request->getPost('quantity'));
         $raw_receiving_quantity = parse_quantity($this->request->getPost('receiving_quantity'));
 
@@ -220,7 +222,7 @@ class Receivings extends Secure_Controller
         $engine_numbers = $this->request->getPost('engine_numbers');
 
         if ($this->validate($validation_rule)) {
-            $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $receiving_quantity, $chassis_numbers, $engine_numbers);
+            $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $unit_price, $receiving_quantity, $chassis_numbers, $engine_numbers);
         } else {
             $data['error'] = lang('Receivings.error_editing_item');
         }

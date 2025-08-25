@@ -71,6 +71,7 @@ class Sales extends Secure_Controller
     public function getIndex(): void
     {
         $this->session->set('allow_temp_items', 1);
+        $this->sale_lib->clear_all(); // Clear the sales cart to ensure fresh data
         $this->_reload();    // TODO: Hungarian Notation
     }
 

@@ -56,4 +56,5 @@ return [
     "unable_to_add_item"           => "Item add to Receiving failed.",
     "unsuccessfully_updated"       => "Receiving update failed.",
     "update"                       => "Update",
+    'sale_price'                   => 'Sale',
 ];

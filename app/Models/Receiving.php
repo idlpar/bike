@@ -147,7 +147,6 @@ class Receiving extends Model
                 'discount_type'      => $item_data['discount_type'],
                 'item_cost_price'    => $cur_item_info->cost_price,
                 'item_unit_price'    => $item_data['price'],
-                'selling_price'      => $item_data['selling_price'], // New field
                 'item_location'      => $item_data['item_location']
             ];
 

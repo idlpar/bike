@@ -110,7 +110,6 @@ if (isset($success)) {
                 <th style="width: 15%;"><?= lang('Sales.item_number') ?></th>
                 <th style="width: 23%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.cost') ?></th>
-                <th style="width: 10%;">Sale Price</th>
                 <th style="width: 8%;"><?= lang(ucfirst($controller_name) . '.quantity') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.ship_pack') ?></th>
                 <th style="width: 14%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
@@ -151,14 +150,7 @@ if (isset($success)) {
                                     'onClick' => 'this.select();'
                                 ]) ?>
                             </td>
-                            <td>
-                                <?= form_input([
-                                    'name'    => 'selling_price',
-                                    'class'   => 'form-control input-sm',
-                                    'value'   => to_currency_no_money($item['selling_price'] ?? 0),
-                                    'onClick' => 'this.select();'
-                                ]) ?>
-                            </td>
+                            
                         <?php } else { ?>
                             <td>
                                 <?= $item['price'] ?>

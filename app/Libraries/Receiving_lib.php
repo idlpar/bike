@@ -368,7 +368,7 @@ class Receiving_lib
      * @param float $receiving_quantity
      * @return bool
      */
-    public function edit_item($line, string $description, string $serialnumber, float $quantity, float $discount, ?int $discount_type, float $price, float $receiving_quantity, float $selling_price, ?array $chassis_numbers, ?array $engine_numbers): bool
+    public function edit_item($line, string $description, string $serialnumber, float $quantity, float $discount, ?int $discount_type, float $price, float $receiving_quantity, ?array $chassis_numbers, ?array $engine_numbers): bool
     {
         $items = $this->get_cart();
         if (isset($items[$line])) {
@@ -384,7 +384,6 @@ class Receiving_lib
             }
 
             $line['price'] = $price;
-            $line['selling_price'] = $selling_price;
             $line['chassis_numbers'] = $chassis_numbers;
             $line['engine_numbers'] = $engine_numbers;
             $line['total'] = $this->get_item_total($quantity, $price, $discount, $discount_type, $receiving_quantity);

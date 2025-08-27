@@ -289,10 +289,35 @@ function get_customer_data_row(object $person, object $stats): array
     $customer_model = model(Customer::class);
     $collection     = $customer_model->get_collection_amount($person->person_id);
 
+    $address_parts = [];
+    if (!empty($person->address_1)) {
+        $address_parts[] = "<b>Vill:</b> {$person->address_1}";
+    }
+    if (!empty($person->address_2)) {
+        $address_parts[] = "<b>PO:</b> {$person->address_2}";
+    }
+    if (!empty($person->city)) {
+        $address_parts[] = "<b>PS:</b> {$person->city}";
+    }
+    if (!empty($person->state)) {
+        $address_parts[] = "<b>Dis:</b> {$person->state}";
+    }
+    if (!empty($person->country)) {
+        $address_parts[] = "<b>Div:</b> {$person->country}";
+    }
+    if (!empty($person->zip)) {
+        $address_parts[] = "<b>PC:</b> {$person->zip}";
+    }
+
+    $address = implode(', ', $address_parts);
+    if (empty($address)) {
+        $address = 'N/A';
+    }
+
     return [
         'people.person_id' => $person->person_id,
         'name'             => $person->first_name . ' ' . $person->last_name,
-        'address'          => "<b>Vill:</b> {$person->address_1}, <b>PO:</b> {$person->address_2}, <b>PS:</b> {$person->city}, <b>Dis:</b> {$person->state}, <b>Div:</b> {$person->country}, <b>PC:</b> {$person->zip}",
+        'address'          => $address,
         'details'          => $person->comments,
         'phone_number'     => $person->phone_number,
         'due'              => to_currency($stats->total - $collection),

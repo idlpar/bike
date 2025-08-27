@@ -380,7 +380,7 @@ echo form_radio($radio_button) ?> <?= lang('Items.kit') ?>
 'name'    => 'allow_alt_description',
 'id'      => 'allow_alt_description',
 'value'   => 1,
-'checked' => $item_info->allow_alt_description === 1,
+'checked' => $item_info->allow_alt_description == 1,
                 ]) ?>
             </div>
         </div>
@@ -392,7 +392,7 @@ echo form_radio($radio_button) ?> <?= lang('Items.kit') ?>
 'name'    => 'is_serialized',
 'id'      => 'is_serialized',
 'value'   => 1,
-'checked' => $item_info->is_serialized === 1,
+'checked' => $item_info->is_serialized == 1,
                 ]) ?>
             </div>
         </div>

@@ -216,20 +216,20 @@ if (isset($success)) {
                         </td>
                     </tr>
                     <tr>
-                        <?php if ($item['allow_alt_description'] === 1) {    // TODO: ===?
+                        <?php if ($item['allow_alt_description'] == 1) {
                             ?>
                             <td style="color: #2F4F4F;"><?= lang('Sales.description_abbrv') . ':' ?></td>
                         <?php } ?>
                         <td colspan="2" style="text-align: left;">
                             <?php
-                                if ($item['allow_alt_description'] === 1) {    // TODO: ===?
+                                if ($item['allow_alt_description'] == 1) {
                                     echo form_input([
                                         'name'  => 'description',
                                         'class' => 'form-control input-sm',
                                         'value' => $item['description'],
                                     ]);
                                 } else {
-                                    if ($item['description'] !== '') {    // TODO: !==?
+                                    if ($item['description'] != '') {
                                         echo $item['description'];
                                         echo form_hidden('description', $item['description']);
                                     } else {
@@ -242,7 +242,7 @@ if (isset($success)) {
                         <td colspan="7"></td>
                     </tr>
 
-                    <?php if ($item['allow_alt_description'] === 1 && $item['is_serialized'] === 1) { ?>
+                    <?php if ($item['allow_alt_description'] == 1 && $item['is_serialized'] == 1) { ?>
                         <tr>
                             <td colspan="9">
                                 <div class="chassis_engine_container">

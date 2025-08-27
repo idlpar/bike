@@ -310,7 +310,7 @@ class Receivings extends Secure_Controller
         $data['stock_location']       = $this->receiving_lib->get_stock_source();
         if ($this->request->getPost('amount_tendered') !== null) {
             $data['amount_tendered'] = parse_decimals($this->request->getPost('amount_tendered'));
-            $data['amount_change']   = to_currency($data['amount_tendered'] - $data['total']);
+            $data['amount_change']   = to_currency(bcsub((string)($data['amount_tendered'] ?: 0), $data['total'], totals_decimals()));
         }
 
         $employee_id      = $this->employee->get_logged_in_employee_info()->person_id;

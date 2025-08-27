@@ -6,10 +6,10 @@ use CodeIgniter\Model;
 
 class Receiving_items_serials extends Model
 {
-    protected $table = 'receiving_items_serials';
-    protected $primaryKey = 'id';
+    protected $table            = 'receiving_items_serials';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $allowedFields = ['receiving_item_id', 'chassis_number', 'engine_number', 'sold'];
+    protected $allowedFields    = ['receiving_item_id', 'chassis_number', 'engine_number', 'sold'];
 
     public function get_available_serials($item_id)
     {
@@ -18,6 +18,7 @@ class Receiving_items_serials extends Model
         $builder->join('receivings_items', 'receivings_items.id = receiving_items_serials.receiving_item_id');
         $builder->where('receivings_items.item_id', $item_id);
         $builder->where('receiving_items_serials.sold', 0);
+
         return $builder->get()->getResultArray();
     }
 

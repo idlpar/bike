@@ -13,8 +13,8 @@ use Config\OSPOS;
                 <?= lang('Common.copyrights', [date('Y')]) ?> ·
                 <a href="https://tarpor.com" target="_blank"><?= lang('Common.website') ?></a> ·
                 <?= esc(config('App')->application_version) ?>
-<!--                <a target="_blank" href="https://github.com/opensourcepos/opensourcepos/commit/--><?php //= esc(config(OSPOS::class)->commit_sha1) ?><!--">-->
-<!--                    --><?php //= esc(substr(config(OSPOS::class)->commit_sha1, 0, 6)); ?>
+<!--                <a target="_blank" href="https://github.com/opensourcepos/opensourcepos/commit/--><?php // = esc(config(OSPOS::class)->commit_sha1)?><!--">-->
+<!--                    --><?php // = esc(substr(config(OSPOS::class)->commit_sha1, 0, 6));?>
 <!--                </a>-->
             </strong>.
         </div>

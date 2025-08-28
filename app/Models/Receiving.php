@@ -130,7 +130,6 @@ class Receiving extends Model
             ];
 
             $builder->insert($receivings_items_data);
-            $receiving_item_id = $this->db->insertID();
 
             if (isset($item_data['chassis_numbers'], $item_data['engine_numbers'])) {
                 $chassis_numbers = $item_data['chassis_numbers'];
@@ -138,7 +137,9 @@ class Receiving extends Model
 
                 for ($i = 0; $i < count($chassis_numbers); $i++) {
                     $serials_data = [
-                        'receiving_item_id' => $receiving_item_id,
+                        'receiving_id'      => $receiving_id,
+                        'item_id'           => $item_data['item_id'],
+                        'line'              => $item_data['line'],
                         'chassis_number'    => $chassis_numbers[$i],
                         'engine_number'     => $engine_numbers[$i],
                     ];

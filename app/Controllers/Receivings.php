@@ -204,8 +204,11 @@ class Receivings extends Secure_Controller
 
         $receiving_quantity = filter_var($raw_receiving_quantity, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
+        var_dump($_POST);
+        die('Controller reached!');
         $chassis_numbers = $this->request->getPost('chassis_numbers');
         $engine_numbers  = $this->request->getPost('engine_numbers');
+
 
         if ($this->validate($validation_rule)) {
             $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $unit_price, $receiving_quantity, $chassis_numbers, $engine_numbers);
@@ -297,8 +300,6 @@ class Receivings extends Secure_Controller
      */
     public function postComplete(): void
     {
-        $data = [];
-
         $data['cart']                 = $this->receiving_lib->get_cart();
         $data['total']                = $this->receiving_lib->get_total();
         $data['transaction_time']     = to_datetime(time());

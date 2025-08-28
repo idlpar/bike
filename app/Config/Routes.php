@@ -22,7 +22,7 @@ $routes->add('reports/summary_(:any)', 'Reports::date_input');
 
 $routes->add('reports/graphical_(:any)/(:any)/(:any)', 'Reports::Graphical_$1/$2/$3/$4');
 $routes->add('reports/graphical_summary_expenses_categories', 'Reports::date_input_only');
-$routes->add('reports/graphical_summary_discounts', 'Reports::summary_discounts_input');
+$routes->add('reports/graphical_summary_discounts', 'Reports::date_input_only');
 $routes->add('reports/graphical_(:any)', 'Reports::date_input');
 
 $routes->add('reports/inventory_(:any)/(:any)', 'Reports::Inventory_$1/$2');

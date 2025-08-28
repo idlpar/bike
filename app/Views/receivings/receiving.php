@@ -249,9 +249,20 @@ if (isset($success)) {
                                     <div class="chassis_engine_row" style="display: flex; gap: 10px;">
                                     <input type="text" class="form-control input-sm chassis_number" placeholder="Chassis Number" style="flex: 1;">
                                     <input type="text" class="form-control input-sm engine_number" placeholder="Engine Number" style="flex: 1;">
-                                    <button class="btn btn-primary btn-sm add_chassis_engine">Add More</button>
+                                    <button type="button" class="btn btn-primary btn-sm add_chassis_engine">Add More</button>
                                 </div>
-                                    <div class="added_chassis_engine"></div>
+                                    <div class="added_chassis_engine">
+                                        <?php if (!empty($item['chassis_numbers']) && !empty($item['engine_numbers'])): ?>
+                                            <?php foreach (array_map(null, $item['chassis_numbers'], $item['engine_numbers']) as [$chassis_number, $engine_number]): ?>
+                                                <div class='added_row' style='display: flex; align-items: center; margin-bottom: 5px;'>
+                                                    <span style='margin-right: 10px;'>Chassis: <?= esc($chassis_number) ?>, Engine: <?= esc($engine_number) ?></span>
+                                                    <a href='#' class='btn btn-danger btn-xs remove_chassis_engine'><span class='glyphicon glyphicon-trash'></span></a>
+                                                    <input type='hidden' name='chassis_numbers[]' value='<?= esc($chassis_number, 'attr') ?>'>
+                                                    <input type='hidden' name='engine_numbers[]' value='<?= esc($engine_number, 'attr') ?>'>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -560,6 +571,36 @@ if (isset($success)) {
             $(this).parents("tr").prevAll("form:first").submit()
         });
 
+        // Function to ensure visible chassis/engine inputs are submitted
+        function prepareChassisEngineForSubmission(form) {
+            var chassisInput = form.find(".chassis_number");
+            var engineInput = form.find(".engine_number");
+
+            if (chassisInput.val().trim() !== "" && engineInput.val().trim() !== "") {
+                // Create hidden inputs for the current visible values
+                var hiddenChassis = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "chassis_numbers[]")
+                    .val(chassisInput.val().trim());
+                var hiddenEngine = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "engine_numbers[]")
+                    .val(engineInput.val().trim());
+
+                form.append(hiddenChassis);
+                form.append(hiddenEngine);
+
+                // Clear the visible inputs to prevent duplicate submission if "Add More" was also clicked
+                chassisInput.val("");
+                engineInput.val("");
+            }
+        }
+
+        // Attach this function to form submissions
+        $("form[id^='cart_']").submit(function() {
+            prepareChassisEngineForSubmission($(this));
+        });
+
         $('[name="discount_toggle"]').change(function() {
             var input = $("<input>").attr("type", "hidden").attr("name", "discount_type").val(($(this).prop('checked')) ? 1 : 0);
             $('#cart_' + $(this).attr('data-line')).append($(input));
@@ -589,6 +630,8 @@ if (isset($success)) {
                     if (added_items_count + 1 === quantity) {
                         container.find(".chassis_engine_row").hide();
                     }
+
+                    $(this).closest("form").submit();
                 } else {
                     alert("You have already added the maximum quantity of items.");
                 }

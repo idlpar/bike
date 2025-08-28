@@ -204,8 +204,7 @@ class Receivings extends Secure_Controller
 
         $receiving_quantity = filter_var($raw_receiving_quantity, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
-        var_dump($_POST);
-        die('Controller reached!');
+        
         $chassis_numbers = $this->request->getPost('chassis_numbers');
         $engine_numbers  = $this->request->getPost('engine_numbers');
 

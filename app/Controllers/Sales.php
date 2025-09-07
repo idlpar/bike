@@ -1441,7 +1441,7 @@ class Sales extends Secure_Controller
         $quote_number      = $this->sale_lib->get_quote_number();
         $sale_type         = $this->sale_lib->get_sale_type();
 
-        if ($sale_type === '') {
+        if ($sale_type === '' || $sale_type === null) {
             $sale_type = SALE_TYPE_POS;
         }
 

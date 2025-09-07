@@ -424,7 +424,7 @@
                         'name'    => 'multi_pack_enabled',
                         'id'      => 'multi_pack_enabled',
                         'value'   => 'multi_pack_enabled',
-                        'checked' => $config['multi_pack_enabled'] === 1,
+                        'checked' => $config['multi_pack_enabled'] == 1,
                     ]) ?>
                 </div>
             </div>

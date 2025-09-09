@@ -111,7 +111,9 @@ if (isset($success)) {
                 <th style="width: 23%;"><?= lang(ucfirst($controller_name) . '.item_name') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.cost') ?></th>
                 <th style="width: 8%;"><?= lang(ucfirst($controller_name) . '.quantity') ?></th>
+                <?php if ($config['multi_pack_enabled']) { ?>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.ship_pack') ?></th>
+                <?php } ?>
                 <th style="width: 14%;"><?= lang(ucfirst($controller_name) . '.discount') ?></th>
                 <th style="width: 10%;"><?= lang(ucfirst($controller_name) . '.total') ?></th>
                 <th style="width: 5%;"><?= lang(ucfirst($controller_name) . '.update') ?></th>
@@ -121,7 +123,7 @@ if (isset($success)) {
         <tbody id="cart_contents">
             <?php if (count($cart) == 0) { ?>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="<?= $config['multi_pack_enabled'] ? '9' : '8' ?>">
                         <div class="alert alert-dismissible alert-info"><?= lang('Sales.no_items_in_cart') ?></div>
                     </td>
                 </tr>
@@ -160,6 +162,7 @@ if (isset($success)) {
                         <td>
                             <?= form_input(['name' => 'quantity', 'class' => 'form-control input-sm', 'value' => to_quantity_decimals($item['quantity']), 'onClick' => 'this.select();']) ?>
                         </td>
+                        <?php if ($config['multi_pack_enabled']) { ?>
                         <td>
                             <?= form_dropdown(
                                 'receiving_quantity',
@@ -168,6 +171,7 @@ if (isset($success)) {
                                 ['class' => 'form-control input-sm']
                             ) ?>
                         </td>
+                        <?php } ?>
 
                         <?php if ($items_module_allowed && $mode != 'requisition') { ?>
                             <td>

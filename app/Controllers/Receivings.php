@@ -205,7 +205,9 @@ class Receivings extends Secure_Controller
 
         $price = parse_decimals($this->request->getPost('price'));
         $quantity = parse_quantity($this->request->getPost('quantity'));
-        $raw_receiving_quantity = parse_quantity($this->request->getPost('receiving_quantity'));
+        $receiving_quantity = $this->config['multi_pack_enabled']
+            ? parse_quantity($this->request->getPost('receiving_quantity'))
+            : 1;
 
         $description = $this->request->getPost('description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);    // TODO: Duplicated code
         $serialnumber = $this->request->getPost('serialnumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '';
@@ -213,8 +215,6 @@ class Receivings extends Secure_Controller
         $discount = $discount_type
             ? parse_quantity(filter_var($this->request->getPost('discount'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION))
             : parse_decimals(filter_var($this->request->getPost('discount'), FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION));
-
-        $receiving_quantity = filter_var($raw_receiving_quantity, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
         if ($this->validate($validation_rule)) {
             $this->receiving_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $discount_type, $price, $receiving_quantity);
@@ -469,6 +469,8 @@ class Receivings extends Secure_Controller
         }
 
         $data['print_after_sale'] = $this->receiving_lib->is_print_after_sale();
+
+		$data['config'] = $this->config;
 
         echo view("receivings/receiving", $data);
     }

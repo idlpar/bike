@@ -583,6 +583,10 @@ class Items extends Secure_Controller
         $reorder_level = parse_quantity($this->request->getPost('reorder_level'));
         $qty_per_pack  = parse_quantity($this->request->getPost('qty_per_pack') ?? '');
 
+        if ($this->config['multi_pack_enabled'] && $qty_per_pack > 1) {
+            $receiving_quantity = $qty_per_pack;
+        }
+
         // Save item data
         $item_data = [
             'name'                      => $this->request->getPost('name'),

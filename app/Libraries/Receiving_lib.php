@@ -303,19 +303,23 @@ class Receiving_lib
 
         if ($config['multi_pack_enabled']) {
             $itemInfo->name .= NAME_SEPARATOR . $itemInfo->pack_name;
-        }
+            if ($itemInfo->qty_per_pack == 0 || $itemInfo->qty_per_pack == 1) {
+                $receivingQuantityChoices = [1 => 'x1'];
+            } else {
+                $receivingQuantityChoices = [
+                    to_quantity_decimals($itemInfo->qty_per_pack) => 'x' . to_quantity_decimals($itemInfo->qty_per_pack),
+                    1 => 'x1'
+                ];
+            }
 
-        if ($itemInfo->receiving_quantity == 0 || $itemInfo->receiving_quantity == 1) {
-            $receivingQuantityChoices = [1 => 'x1'];
+            if (is_null($receivingQuantity)) {
+                $receivingQuantity = $itemInfo->qty_per_pack;
+            }
         } else {
-            $receivingQuantityChoices = [
-                to_quantity_decimals($itemInfo->receiving_quantity) => 'x' . to_quantity_decimals($itemInfo->receiving_quantity),
-                1 => 'x1'
-            ];
-        }
-
-        if (is_null($receivingQuantity)) {
-            $receivingQuantity = $itemInfo->receiving_quantity;
+            $receivingQuantityChoices = [1 => 'x1'];
+            if (is_null($receivingQuantity)) {
+                $receivingQuantity = 1;
+            }
         }
 
         $attributeLinks = $this->attribute->get_link_values((int) $itemId, 'receiving_id', $receivingId, Attribute::SHOW_IN_RECEIVINGS)->getRowObject();

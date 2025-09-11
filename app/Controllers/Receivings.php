@@ -50,7 +50,7 @@ class Receivings extends Secure_Controller
      */
     public function getIndex(): void
     {
-        $this->_reload();
+        $this->reload();
     }
 
     /**
@@ -96,7 +96,7 @@ class Receivings extends Secure_Controller
             $this->receiving_lib->set_supplier($supplier_id);
         }
 
-        $this->_reload();    // TODO: Hungarian notation
+        $this->reload();    // TODO: Hungarian notation
     }
 
     /**
@@ -121,7 +121,7 @@ class Receivings extends Secure_Controller
             $this->receiving_lib->set_stock_destination($stock_destination);
         }
 
-        $this->_reload();    // TODO: Hungarian notation
+        $this->reload();    // TODO: Hungarian notation
     }
 
     /**
@@ -183,7 +183,7 @@ class Receivings extends Secure_Controller
             $data['error'] = lang('Receivings.unable_to_add_item');
         }
 
-        $this->_reload($data);    // TODO: Hungarian notation
+        $this->reload($data);    // TODO: Hungarian notation
     }
 
     /**
@@ -222,7 +222,47 @@ class Receivings extends Secure_Controller
             $data['error'] = lang('Receivings.error_editing_item');
         }
 
-        $this->_reload($data);    // TODO: Hungarian notation
+        $this->reload($data);    // TODO: Hungarian notation
+    }
+
+    public function postAddSerial($line)
+    {
+        $data = [];
+        $engine_number = $this->request->getPost('engine_number', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $chasis_number = $this->request->getPost('chasis_number', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $cart = $this->receiving_lib->get_cart();
+        $item = $cart[$line];
+
+        $serials = explode(',', rtrim($item['description'], ','));
+        if(count($serials) -1 >= (int)$item['quantity']) {
+            $data['error'] = lang('Receivings.quantity_exceeds');
+            $this->reload($data);
+            return;
+        }
+
+        $description = $item['description'];
+        $description .= $engine_number . '|' . $chasis_number . ',';
+
+        $this->receiving_lib->edit_item($line, $description, $item['serialnumber'], $item['quantity'], $item['discount'], $item['discount_type'], $item['price'], $item['receiving_quantity']);
+
+        $this->reload($data);
+    }
+
+    public function postRemoveSerial($line)
+    {
+        $data = [];
+        $serial = $this->request->getPost('serial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $cart = $this->receiving_lib->get_cart();
+        $item = $cart[$line];
+
+        $description = $item['description'];
+        $description = str_replace($serial . ',', '', $description);
+
+        $this->receiving_lib->edit_item($line, $description, $item['serialnumber'], $item['quantity'], $item['discount'], $item['discount_type'], $item['price'], $item['receiving_quantity']);
+
+        $this->reload($data);
     }
 
     /**
@@ -265,7 +305,7 @@ class Receivings extends Secure_Controller
     {
         $this->receiving_lib->delete_item($item_number);
 
-        $this->_reload();    // TODO: Hungarian notation
+        $this->reload();    // TODO: Hungarian notation
     }
 
     /**
@@ -298,7 +338,7 @@ class Receivings extends Secure_Controller
         $this->receiving_lib->clear_reference();
         $this->receiving_lib->remove_supplier();
 
-        $this->_reload();    // TODO: Hungarian notation
+        $this->reload();    // TODO: Hungarian notation
     }
 
     /**
@@ -380,7 +420,7 @@ class Receivings extends Secure_Controller
         } else {
             $data['error'] = lang('Receivings.error_requisition');
 
-            $this->_reload($data);    // TODO: Hungarian notation
+            $this->reload($data);    // TODO: Hungarian notation
         }
     }
 
@@ -433,7 +473,7 @@ class Receivings extends Secure_Controller
      * @param array $data
      * @return void
      */
-    private function _reload(array $data = []): void    // TODO: Hungarian notation
+    public function reload(array $data = []): void    // TODO: Hungarian notation
     {
         $data['cart'] = $this->receiving_lib->get_cart();
         $data['modes'] = ['receive' => lang('Receivings.receiving'), 'return' => lang('Receivings.return')];
@@ -519,6 +559,6 @@ class Receivings extends Secure_Controller
     {
         $this->receiving_lib->clear_all();
 
-        $this->_reload();    // TODO: Hungarian Notation
+        $this->reload();    // TODO: Hungarian notation
     }
 }

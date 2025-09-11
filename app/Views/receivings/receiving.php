@@ -206,7 +206,7 @@ if (isset($success)) {
                             </a>
                         </td>
                     </tr>
-                    <tr>
+                    <tr style="display: none;">
                         <?php if ($item['allow_alt_description'] == 1) {    // TODO: ===?
                         ?>
                             <td style="color: #2F4F4F;"><?= lang('Sales.description_abbrv') . ':' ?></td>
@@ -232,6 +232,39 @@ if (isset($success)) {
                         </td>
                         <td colspan="7"></td>
                     </tr>
+                    <?php if($item['is_serialized'] == 1): ?>
+                    <tr>
+                        <td colspan="12">
+                            <div id="serial_preview_<?= $line ?>">
+                                <?php
+                                $serials = explode(',', rtrim($item['description'], ','));
+                                foreach($serials as $key => $serial) {
+                                    if($serial == '') continue;
+                                    $serial_parts = explode('|', $serial);
+                                    if(count($serial_parts) > 1) {
+                                        echo '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.$serial.'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <?php if(count($serials) -1 < (int)$item['quantity']): ?>
+                            <div id="serial_input_<?= $line ?>">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="text" name="engine_number" class="form-control input-sm" placeholder="Engine Number">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input type="text" name="chasis_number" class="form-control input-sm" placeholder="Chasis Number">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-success btn-sm add-serial" data-line="<?= $line ?>">Add More</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endif; ?>
 
                     <?= form_close() ?>
 
@@ -542,6 +575,38 @@ if (isset($success)) {
             $('#cart_' + $(this).attr('data-line')).submit();
         });
 
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).on('click', '.add-serial', function(e) {
+        e.preventDefault();
+        var line = $(this).data('line');
+        var engine_number = $('#serial_input_' + line + ' input[name="engine_number"]').val();
+        var chasis_number = $('#serial_input_' + line + ' input[name="chasis_number"]').val();
+
+        if (engine_number === '' || chasis_number === '') {
+            return;
+        }
+
+        $.post('<?= esc($controller_name) ?>/addSerial/' + line, {
+            engine_number: engine_number,
+            chasis_number: chasis_number
+        }, function() {
+            window.location.reload();
+        });
+    });
+
+    $(document).on('click', '.remove-serial', function(e) {
+        e.preventDefault();
+        var line = $(this).data('line');
+        var serial = $(this).data('serial');
+
+        $.post('<?= esc($controller_name) ?>/removeSerial/' + line, {
+            serial: serial
+        }, function() {
+            window.location.reload();
+        });
     });
 </script>
 

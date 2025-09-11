@@ -81,6 +81,21 @@ echo view('partial/print_receipt', ['print_after_sale', $print_after_sale, 'sele
             <tr>
                 <td><?= esc($item['serialnumber']) ?></td>
             </tr>
+            <?php if (!empty($item['description'])): ?>
+            <tr>
+                <td colspan="4">
+                    <?php 
+                        $serials = explode(',', rtrim($item['description'], ','));
+                        foreach($serials as $serial) {
+                            $serial_parts = explode('|', $serial);
+                            if(count($serial_parts) > 1) {
+                                echo 'Engine: ' . esc($serial_parts[0]) . ' | Chassis: ' . esc($serial_parts[1]) . '<br>';
+                            }
+                        }
+                    ?>
+                </td>
+            </tr>
+            <?php endif; ?>
             <?php if ($item['discount'] > 0) { ?>
                 <tr>
                     <?php if ($item['discount_type'] === FIXED) { ?>

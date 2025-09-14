@@ -251,7 +251,7 @@ class Receivings extends Secure_Controller
             if($serial == '') continue;
             $serial_parts = explode('|', $serial);
             if(count($serial_parts) > 1) {
-                $serial_preview .= '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+                $serial_preview .= '<div class="serial-entry" style="font-size: large; text-align: left;"><b>' . ($key + 1) . '.</b>&nbsp;&nbsp;&nbsp;Engine Number: <b>' . $serial_parts[0] . '</b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Chasis Number: <b>' . $serial_parts[1] . '</b>&nbsp;&nbsp;&nbsp;<a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash" style="color: red;"></i></a></div>';
             }
         }
 
@@ -280,7 +280,7 @@ class Receivings extends Secure_Controller
             if($serial == '') continue;
             $serial_parts = explode('|', $serial);
             if(count($serial_parts) > 1) {
-                $serial_preview .= '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+                $serial_preview .= '<div class="serial-entry" style="font-size: large; text-align: left;"><b>' . ($key + 1) . '.</b>&nbsp;&nbsp;&nbsp;Engine Number: <b>' . $serial_parts[0] . '</b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Chasis Number: <b>' . $serial_parts[1] . '</b>&nbsp;&nbsp;&nbsp;<a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash" style="color: red;"></i></a></div>';
             }
         }
 

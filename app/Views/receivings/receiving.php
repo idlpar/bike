@@ -206,21 +206,21 @@ if (isset($success)) {
                             </a>
                         </td>
                     </tr>
-                    <tr style="display: none;">
-                        <?php if ($item['allow_alt_description'] == 1) {    // TODO: ===?
-                        ?>
+                    <?php if ($item['is_serialized'] == 0): ?>
+                    <tr>
+                        <?php if ($item['allow_alt_description'] == 1) { ?>
                             <td style="color: #2F4F4F;"><?= lang('Sales.description_abbrv') . ':' ?></td>
                         <?php } ?>
                         <td colspan="2" style="text-align: left;">
                             <?php
-                            if ($item['allow_alt_description'] == 1) {    // TODO: ===?
+                            if ($item['allow_alt_description'] == 1) {
                                 echo form_input([
                                     'name'  => 'description',
                                     'class' => 'form-control input-sm',
                                     'value' => $item['description']
                                 ]);
                             } else {
-                                if ($item['description'] != '') {    // TODO: !==?
+                                if ($item['description'] != '') {
                                     echo $item['description'];
                                     echo form_hidden('description', $item['description']);
                                 } else {
@@ -232,6 +232,9 @@ if (isset($success)) {
                         </td>
                         <td colspan="7"></td>
                     </tr>
+                    <?php else: // is_serialized == 1 ?>
+                        <?= form_hidden('description', $item['description']) ?>
+                    <?php endif; ?>
                     <?php if($item['is_serialized'] == 1): ?>
                     <tr>
                         <td colspan="12">
@@ -242,7 +245,7 @@ if (isset($success)) {
                                     if($serial == '') continue;
                                     $serial_parts = explode('|', $serial);
                                     if(count($serial_parts) > 1) {
-                                        echo '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.$serial.'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+                                        echo '<div class="serial-entry" style="font-size: large; text-align: left;"><b>' . ($key + 1) . '.</b>&nbsp;&nbsp;&nbsp;Engine Number: <b>' . $serial_parts[0] . '</b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Chasis Number: <b>' . $serial_parts[1] . '</b>&nbsp;&nbsp;&nbsp;<a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash" style="color: red;"></i></a></div>';
                                     }
                                 }
                                 ?>

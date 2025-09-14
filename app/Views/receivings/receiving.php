@@ -237,7 +237,7 @@ if (isset($success)) {
                         <td colspan="12">
                             <div id="serial_preview_<?= $line ?>">
                                 <?php
-                                $serials = explode(',', rtrim($item['description'], ','));
+                                $serials = array_filter(explode(',', $item['description']));
                                 foreach($serials as $key => $serial) {
                                     if($serial == '') continue;
                                     $serial_parts = explode('|', $serial);
@@ -247,7 +247,7 @@ if (isset($success)) {
                                 }
                                 ?>
                             </div>
-                            <?php if(count($serials) -1 < (int)$item['quantity']): ?>
+                            <?php if(count($serials) < (int)$item['quantity']): ?>
                             <div id="serial_input_<?= $line ?>">
                                 <div class="row">
                                     <div class="col-md-5">
@@ -582,8 +582,9 @@ if (isset($success)) {
     $(document).on('click', '.add-serial', function(e) {
         e.preventDefault();
         var line = $(this).data('line');
-        var engine_number = $('#serial_input_' + line + ' input[name="engine_number"]').val();
-        var chasis_number = $('#serial_input_' + line + ' input[name="chasis_number"]').val();
+        var serial_input_div = $('#serial_input_' + line);
+        var engine_number = serial_input_div.find('input[name="engine_number"]').val();
+        var chasis_number = serial_input_div.find('input[name="chasis_number"]').val();
 
         if (engine_number === '' || chasis_number === '') {
             return;
@@ -592,9 +593,18 @@ if (isset($success)) {
         $.post('<?= esc($controller_name) ?>/addSerial/' + line, {
             engine_number: engine_number,
             chasis_number: chasis_number
-        }, function() {
-            window.location.reload();
-        });
+        }, function(response) {
+            if(response.success) {
+                $('#serial_preview_' + line).html(response.serial_preview);
+                serial_input_div.find('input[name="engine_number"]').val('');
+                serial_input_div.find('input[name="chasis_number"]').val('');
+                if(!response.show_input) {
+                    serial_input_div.hide();
+                }
+            } else {
+                alert(response.message);
+            }
+        }, 'json');
     });
 
     $(document).on('click', '.remove-serial', function(e) {
@@ -604,9 +614,15 @@ if (isset($success)) {
 
         $.post('<?= esc($controller_name) ?>/removeSerial/' + line, {
             serial: serial
-        }, function() {
-            window.location.reload();
-        });
+        }, function(response) {
+            if(response.success) {
+                $('#serial_preview_' + line).html(response.serial_preview);
+                var serial_input_div = $('#serial_input_' + line);
+                if(response.show_input) {
+                    serial_input_div.show();
+                }
+            }
+        }, 'json');
     });
 </script>
 

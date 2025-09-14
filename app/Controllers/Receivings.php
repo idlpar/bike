@@ -227,18 +227,15 @@ class Receivings extends Secure_Controller
 
     public function postAddSerial($line)
     {
-        $data = [];
         $engine_number = $this->request->getPost('engine_number', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $chasis_number = $this->request->getPost('chasis_number', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $cart = $this->receiving_lib->get_cart();
         $item = $cart[$line];
 
-        $serials = explode(',', rtrim($item['description'], ','));
-        if(count($serials) -1 >= (int)$item['quantity']) {
-            $data['error'] = lang('Receivings.quantity_exceeds');
-            $this->reload($data);
-            return;
+        $serials = array_filter(explode(',', $item['description']));
+        if(count($serials) >= (int)$item['quantity']) {
+            return $this->response->setJSON(['success' => false, 'message' => lang('Receivings.quantity_exceeds')]);
         }
 
         $description = $item['description'];
@@ -246,23 +243,50 @@ class Receivings extends Secure_Controller
 
         $this->receiving_lib->edit_item($line, $description, $item['serialnumber'], $item['quantity'], $item['discount'], $item['discount_type'], $item['price'], $item['receiving_quantity']);
 
-        $this->reload($data);
+        $cart = $this->receiving_lib->get_cart();
+        $item = $cart[$line];
+        $serials = array_filter(explode(',', $item['description']));
+        $serial_preview = '';
+        foreach($serials as $key => $serial) {
+            if($serial == '') continue;
+            $serial_parts = explode('|', $serial);
+            if(count($serial_parts) > 1) {
+                $serial_preview .= '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+            }
+        }
+
+        $show_input = count($serials) < (int)$item['quantity'];
+
+        return $this->response->setJSON(['success' => true, 'serial_preview' => $serial_preview, 'show_input' => $show_input]);
     }
 
     public function postRemoveSerial($line)
     {
-        $data = [];
-        $serial = $this->request->getPost('serial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $serial_to_remove = $this->request->getPost('serial', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $cart = $this->receiving_lib->get_cart();
         $item = $cart[$line];
 
         $description = $item['description'];
-        $description = str_replace($serial . ',', '', $description);
+        $description = str_replace($serial_to_remove . ',', '', $description);
 
         $this->receiving_lib->edit_item($line, $description, $item['serialnumber'], $item['quantity'], $item['discount'], $item['discount_type'], $item['price'], $item['receiving_quantity']);
 
-        $this->reload($data);
+        $cart = $this->receiving_lib->get_cart();
+        $item = $cart[$line];
+        $serials = array_filter(explode(',', $item['description']));
+        $serial_preview = '';
+        foreach($serials as $key => $serial) {
+            if($serial == '') continue;
+            $serial_parts = explode('|', $serial);
+            if(count($serial_parts) > 1) {
+                $serial_preview .= '<div class="serial-entry">' . ($key + 1) . '. Engine Number: ' . $serial_parts[0] . ' | Chasis Number: ' . $serial_parts[1] . ' <a href="#" class="remove-serial" data-line="'.$line.'" data-serial="'.esc($serial, 'attr').'"><i class="glyphicon glyphicon-trash"></i></a></div>';
+            }
+        }
+
+        $show_input = count($serials) < (int)$item['quantity'];
+
+        return $this->response->setJSON(['success' => true, 'serial_preview' => $serial_preview, 'show_input' => $show_input]);
     }
 
     /**

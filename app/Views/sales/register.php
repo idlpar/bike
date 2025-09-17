@@ -885,49 +885,128 @@ helper('url');
 <?= view('partial/footer') ?>
 
 <?php if (isset($serials) && !empty($serials)) : ?>
-    <div class="modal" id="serial-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><?= lang('Sales.select_serial') ?></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<style>
+    #serial-modal .modal-dialog {
+        width: 80%;
+        max-width: 900px;
+    }
+    #serial-modal .modal-content {
+        background-color: #e9ecef;
+    }
+    #serial-modal .modal-header {
+        background-color: #e0f2f7; /* Matching modal-footer background */
+        color: #333;
+        border-bottom: none; /* Removed redundant border */
+    }
+    #serial-modal .modal-header .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        color: red;
+        opacity: 1;
+    }
+    #serial-modal .modal-title {
+        font-weight: bold;
+        color: #0056b3; /* Dark blue for the title */
+    }
+    #serial-modal .modal-footer {
+        background-color: #e0f2f7; /* Light blue for the footer */
+        border-top: 1px solid #cce5ed; /* Slightly darker border for separation */
+    }
+    #serial-search {
+        margin-bottom: 15px;
+    }
+    .serial-table-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    #serial-table {
+        border: 1px solid #dee2e6; /* Light border for the table */
+    }
+    #serial-table th, #serial-table td {
+        border: 1px solid #dee2e6; /* Light border for table cells */
+    }
+    #serial-table thead th {
+        background-color: #343a40; /* Dark background for table header */
+        color: white; /* Light text for contrast */
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    #serial-table input[type="checkbox"] {
+        transform: scale(1.3);
+        cursor: pointer;
+    }
+</style>
+
+<div class="modal" id="serial-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><?= lang('Sales.select_serial') ?></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?= form_open("$controller_name/addSerialsToCart", ['id' => 'add_serials_form']) ?>
+            <div class="modal-body">
+                <input type="hidden" name="item_id" value="<?= esc($item_id) ?>">
+                <div class="form-group">
+                    <input type="text" id="serial-search" class="form-control" placeholder="<?= lang('Common.search') ?>...">
                 </div>
-                <?= form_open("$controller_name/addSerialsToCart", ['id' => 'add_serials_form']) ?>
-                <div class="modal-body">
-                    <input type="hidden" name="item_id" value="<?= esc($item_id) ?>">
-                    <table class="table">
+                <div class="serial-table-container">
+                    <table id="serial-table" class="table table-striped table-hover">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th><?= lang('Sales.engine_number') ?></th>
-                            <th><?= lang('Sales.chassis_number') ?></th>
-                        </tr>
+                            <tr>
+                                <th><input type="checkbox" id="select-all-serials"></th>
+                                <th><?= lang('Sales.engine_number') ?></th>
+                                <th><?= lang('Sales.chassis_number') ?></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($serials as $serial) : ?>
-                            <tr>
-                                <td><input type="checkbox" name="serials[]" value="<?= esc($serial['engine_number'] . '|' . $serial['chassis_number']) ?>"></td>
-                                <td><?= esc($serial['engine_number']) ?></td>
-                                <td><?= esc($serial['chassis_number']) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                            <?php foreach ($serials as $serial) : ?>
+                                <tr>
+                                    <td><input type="checkbox" class="serial-checkbox" name="serials[]" value="<?= esc($serial['engine_number'] . '|' . $serial['chassis_number']) ?>"></td>
+                                    <td><?= esc($serial['engine_number']) ?></td>
+                                    <td><?= esc($serial['chassis_number']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary"><?= lang('Common.submit') ?></button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= lang('Common.close') ?></button>
-                </div>
-                <?= form_close() ?>
             </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> <?= lang('Common.submit') ?></button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> <?= lang('Common.close') ?></button>
+            </div>
+            <?= form_close() ?>
         </div>
     </div>
+</div>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#serial-modal').modal('show');
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#serial-modal').modal('show');
+
+        // Search functionality
+        $('#serial-search').on('keyup', function() {
+            var value = $(this).val().toLowerCase();
+            $("#serial-table tbody tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
         });
-    </script>
+
+        // Select all checkbox
+        $('#select-all-serials').on('click', function() {
+            $('.serial-checkbox:visible').prop('checked', this.checked);
+        });
+
+        // If any individual checkbox is unchecked, uncheck the "select all" checkbox
+        $('.serial-checkbox').on('change', function() {
+            if (!this.checked) {
+                $('#select-all-serials').prop('checked', false);
+            }
+        });
+    });
+</script>
 <?php endif; ?>

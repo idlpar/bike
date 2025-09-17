@@ -883,3 +883,51 @@ helper('url');
 </script>
 
 <?= view('partial/footer') ?>
+
+<?php if (isset($serials) && !empty($serials)) : ?>
+    <div class="modal" id="serial-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?= lang('Sales.select_serial') ?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?= form_open("$controller_name/addSerialsToCart", ['id' => 'add_serials_form']) ?>
+                <div class="modal-body">
+                    <input type="hidden" name="item_id" value="<?= esc($item_id) ?>">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th><?= lang('Sales.engine_number') ?></th>
+                            <th><?= lang('Sales.chassis_number') ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($serials as $serial) : ?>
+                            <tr>
+                                <td><input type="checkbox" name="serials[]" value="<?= esc($serial['engine_number'] . '|' . $serial['chassis_number']) ?>"></td>
+                                <td><?= esc($serial['engine_number']) ?></td>
+                                <td><?= esc($serial['chassis_number']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"><?= lang('Common.submit') ?></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= lang('Common.close') ?></button>
+                </div>
+                <?= form_close() ?>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#serial-modal').modal('show');
+        });
+    </script>
+<?php endif; ?>

@@ -15,7 +15,9 @@ use App\Models\Giftcard;
 use App\Models\Inventory;
 use App\Models\Item;
 use App\Models\Item_kit;
+use App\Models\Receiving_items_serials;
 use App\Models\Sale;
+use App\Models\Sales_items_serials;
 use App\Models\Stock_location;
 use App\Models\Tokens\Token_invoice_count;
 use App\Models\Tokens\Token_customer;
@@ -504,49 +506,72 @@ class Sales extends Secure_Controller
         $quantity = ($mode == 'return') ? -$quantity : $quantity;
         $item_location = $this->sale_lib->get_sale_location();
 
-        if ($mode == 'return' && $this->sale->is_valid_receipt($item_id_or_number_or_item_kit_or_receipt)) {
-            $this->sale_lib->return_entire_sale($item_id_or_number_or_item_kit_or_receipt);
-        } elseif ($this->item_kit->is_valid_item_kit($item_id_or_number_or_item_kit_or_receipt)) {
-            // Add kit item to order if one is assigned
-            $pieces = explode(' ', $item_id_or_number_or_item_kit_or_receipt);
+        $item_info = $this->item->get_info($item_id_or_number_or_item_kit_or_receipt);
 
-            $item_kit_id = (count($pieces) > 1) ? $pieces[1] : $item_id_or_number_or_item_kit_or_receipt;
-            $item_kit_info = $this->item_kit->get_info($item_kit_id);
-            $kit_item_id = $item_kit_info->kit_item_id;
-            $kit_price_option = $item_kit_info->price_option;
-            $kit_print_option = $item_kit_info->print_option; // 0-all, 1-priced, 2-kit-only
+        if ($item_info && $item_info->is_serialized) {
+            $receiving_items_serials_model = model(Receiving_items_serials::class);
+            $sales_items_serials_model = model(Sales_items_serials::class);
 
-            if ($discount_type == $item_kit_info->kit_discount_type) {
-                if ($item_kit_info->kit_discount > $discount) {
-                    $discount = $item_kit_info->kit_discount;
-                }
-            } else {
-                $discount = $item_kit_info->kit_discount;
-                $discount_type = $item_kit_info->kit_discount_type;
+            $sold_serials = $sales_items_serials_model->where('item_id', $item_info->item_id)->findAll();
+            $sold_serial_numbers = array_map(function($item) {
+                return $item['engine_number'];
+            }, $sold_serials);
+
+            $available_serials_query = $receiving_items_serials_model->where('item_id', $item_info->item_id);
+
+            if (!empty($sold_serial_numbers)) {
+                $available_serials_query->whereNotIn('engine_number', $sold_serial_numbers);
             }
 
-            $print_option = PRINT_ALL; // Always include in list of items on invoice // TODO: This variable is never used in the code
+            $available_serials = $available_serials_query->findAll();
 
-            if (!empty($kit_item_id)) {
-                if (!$this->sale_lib->add_item($kit_item_id, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_KIT, $kit_price_option, $kit_print_option, $price)) {
+            $data['serials'] = $available_serials;
+            $data['item_id'] = $item_info->item_id;
+        } else {
+            if ($mode == 'return' && $this->sale->is_valid_receipt($item_id_or_number_or_item_kit_or_receipt)) {
+                $this->sale_lib->return_entire_sale($item_id_or_number_or_item_kit_or_receipt);
+            } elseif ($this->item_kit->is_valid_item_kit($item_id_or_number_or_item_kit_or_receipt)) {
+                // Add kit item to order if one is assigned
+                $pieces = explode(' ', $item_id_or_number_or_item_kit_or_receipt);
+
+                $item_kit_id = (count($pieces) > 1) ? $pieces[1] : $item_id_or_number_or_item_kit_or_receipt;
+                $item_kit_info = $this->item_kit->get_info($item_kit_id);
+                $kit_item_id = $item_kit_info->kit_item_id;
+                $kit_price_option = $item_kit_info->price_option;
+                $kit_print_option = $item_kit_info->print_option; // 0-all, 1-priced, 2-kit-only
+
+                if ($discount_type == $item_kit_info->kit_discount_type) {
+                    if ($item_kit_info->kit_discount > $discount) {
+                        $discount = $item_kit_info->kit_discount;
+                    }
+                } else {
+                    $discount = $item_kit_info->kit_discount;
+                    $discount_type = $item_kit_info->kit_discount_type;
+                }
+
+                $print_option = PRINT_ALL; // Always include in list of items on invoice // TODO: This variable is never used in the code
+
+                if (!empty($kit_item_id)) {
+                    if (!$this->sale_lib->add_item($kit_item_id, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_KIT, $kit_price_option, $kit_print_option, $price)) {
+                        $data['error'] = lang('Sales.unable_to_add_item');
+                    } else {
+                        $data['warning'] = $this->sale_lib->out_of_stock($item_kit_id, $item_location);
+                    }
+                }
+
+                // Add item kit items to order
+                $stock_warning = null;
+                if (!$this->sale_lib->add_item_kit($item_id_or_number_or_item_kit_or_receipt, $item_location, $discount, $discount_type, $kit_price_option, $kit_print_option, $stock_warning)) {
+                    $data['error'] = lang('Sales.unable_to_add_item');
+                } elseif ($stock_warning != null) {
+                    $data['warning'] = $stock_warning;
+                }
+            } else {
+                if ($item_id_or_number_or_item_kit_or_receipt == '' || !$this->sale_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, $price)) {
                     $data['error'] = lang('Sales.unable_to_add_item');
                 } else {
-                    $data['warning'] = $this->sale_lib->out_of_stock($item_kit_id, $item_location);
+                    $data['warning'] = $this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt, $item_location);
                 }
-            }
-
-            // Add item kit items to order
-            $stock_warning = null;
-            if (!$this->sale_lib->add_item_kit($item_id_or_number_or_item_kit_or_receipt, $item_location, $discount, $discount_type, $kit_price_option, $kit_print_option, $stock_warning)) {
-                $data['error'] = lang('Sales.unable_to_add_item');
-            } elseif ($stock_warning != null) {
-                $data['warning'] = $stock_warning;
-            }
-        } else {
-            if ($item_id_or_number_or_item_kit_or_receipt == '' || !$this->sale_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $item_location, $quantity, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, $price)) {
-                $data['error'] = lang('Sales.unable_to_add_item');
-            } else {
-                $data['warning'] = $this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt, $item_location);
             }
         }
 
@@ -842,6 +867,24 @@ class Sales extends Secure_Controller
             }
 
             $data['sale_id_num'] = $this->sale->save_value($sale_id, $data['sale_status'], $data['cart'], $customer_id, $employee_id, $data['comments'], $invoice_number, $work_order_number, $quote_number, $sale_type, $data['payments'], $data['dinner_table'], $tax_details);
+
+            if ($data['sale_id_num'] != -1) {
+                $sales_items_serials_model = model(Sales_items_serials::class);
+                foreach($data['cart'] as $line => $item) {
+                    if(isset($item['is_serialized']) && $item['is_serialized'] == 1) {
+                        $serial_parts = explode('|', $item['description']);
+                        if(count($serial_parts) > 1) {
+                            $sales_items_serials_model->save([
+                                'sale_id' => $data['sale_id_num'],
+                                'item_id' => $item['item_id'],
+                                'line' => $line,
+                                'engine_number' => $serial_parts[0],
+                                'chassis_number' => $serial_parts[1]
+                            ]);
+                        }
+                    }
+                }
+            }
 
             $data['sale_id'] = 'POS ' . $data['sale_id_num'];
 
@@ -1690,5 +1733,29 @@ class Sales extends Secure_Controller
         }
 
         return null;
+    }
+
+    public function postAddSerialsToCart(): void
+    {
+        $item_id = $this->request->getPost('item_id', FILTER_SANITIZE_NUMBER_INT);
+        $item_location = $this->sale_lib->get_sale_location();
+        $serials = $this->request->getPost('serials');
+        $discount = 0.0;
+        $discount_type = 0;
+
+        if (!empty($serials)) {
+            foreach ($serials as $serial) {
+                $serial_parts = explode('|', $serial);
+                $engine_number = $serial_parts[0];
+                $chassis_number = $serial_parts[1];
+
+                // The description will be used to store the serial numbers
+                $description = $engine_number . '|' . $chassis_number;
+
+                $this->sale_lib->add_item($item_id, $item_location, 1, $discount, $discount_type, PRICE_MODE_STANDARD, null, null, null, $description);
+            }
+        }
+
+        $this->_reload();
     }
 }

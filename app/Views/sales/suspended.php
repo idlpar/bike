@@ -13,8 +13,24 @@ $this->dinner_table = model(Dinner_table::class);
 <style>
     @media (min-width: 768px) {
         .modal-dlg .modal-dialog {
-            width: 750px !important;
+            width: 900px !important;
         }
+    }
+
+    #suspended_sales_table ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    #suspended_sales_table li {
+        padding-left: 1.3em;
+        text-indent: -1.3em;
+    }
+
+    #suspended_sales_table li::before {
+        content: "\25B8"; /* Right-pointing small triangle */
+        color: #007bff; /* Bootstrap primary color */
+        padding-right: 0.5em;
     }
 </style>
 
@@ -28,7 +44,6 @@ $this->dinner_table = model(Dinner_table::class);
             <?php } ?>
             <th><?= lang('Sales.customer') ?></th>
             <th><?= lang('Sales.employee') ?></th>
-            <th><?= lang('Sales.comments') ?></th>
             <th><?= lang('Sales.items') ?></th>
             <th><?= lang('Sales.unsuspend_and_delete') ?></th>
         </tr>
@@ -44,7 +59,7 @@ $this->dinner_table = model(Dinner_table::class);
                 <td>
                     <?php
                     if (isset($suspended_sale['customer_id'])) {
-                        $customer      = model(Customer::class);    // TODO: Should we be accessing a model in a view rather than passing this data to the view via the controller?
+                        $customer      = model(Customer::class);
                         $customer_data = $customer->get_info($suspended_sale['customer_id']);
                         echo esc("{$customer_data->first_name} {$customer_data->last_name}");
                     } else {
@@ -63,11 +78,10 @@ $this->dinner_table = model(Dinner_table::class);
                         &nbsp;
                     <?php } ?>
                 </td>
-                <td><?= esc($suspended_sale['comment']) ?></td>
                 <td>
                     <ul>
                         <?php foreach ($suspended_sale['items'] as $item) { ?>
-                            <li><?= $item['name'] . ' (x' . $item['quantity_purchased'] . ')' ?></li>
+                            <li><?= $item['name'] . ' (x' . (int)$item['quantity_purchased'] . ')' ?></li>
                         <?php } ?>
                     </ul>
                 </td>

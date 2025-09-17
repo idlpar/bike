@@ -48,6 +48,16 @@ use App\Models\Employee;
 <style>
     #mode_form .panel-body.form-group {
         background-color: #c8e6c9 !important; /* A darker green color */
+        position: relative;
+    }
+    .sales-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: #388e3c;
     }
 </style>
 
@@ -72,6 +82,7 @@ helper('url');
     <!-- Top register controls -->
     <?= form_open("$controller_name/changeMode", ['id' => 'mode_form', 'class' => 'form-horizontal panel panel-default']) ?>
         <div class="panel-body form-group">
+            <div class="sales-text">Sales</div>
             <ul>
                 <li class="pull-left first_li">
                     <label class="control-label"><?= lang(ucfirst($controller_name) . '.mode') ?></label>

@@ -23,6 +23,16 @@
 <style>
     #mode_form .panel-body.form-group {
         background-color: #f2dede !important; /* A light red color */
+        position: relative;
+    }
+    .receiving-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+        color: #a94442; /* A darker red color */
     }
 </style>
 
@@ -47,6 +57,7 @@ if (isset($success)) {
     <?= form_open("$controller_name/changeMode", ['id' => 'mode_form', 'class' => 'form-horizontal panel panel-default']) ?>
 
     <div class="panel-body form-group">
+        <div class="receiving-text">Receivings</div>
         <ul>
             <li class="pull-left first_li">
                 <label class="control-label"><?= lang(ucfirst($controller_name) . '.mode') ?></label>

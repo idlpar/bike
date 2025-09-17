@@ -9,6 +9,7 @@ use App\Models\Inventory;
 use App\Models\Item;
 use App\Models\Item_kit;
 use App\Models\Receiving;
+use App\Models\Receiving_items_serials;
 use App\Models\Stock_location;
 use App\Models\Supplier;
 use Config\OSPOS;
@@ -411,6 +412,28 @@ class Receivings extends Secure_Controller
 
         // SAVE receiving to database
         $data['receiving_id'] = 'RECV ' . $this->receiving->save_value($data['cart'], $supplier_id, $employee_id, $data['comment'], $data['reference'], $data['payment_type'], $data['stock_location']);
+
+        if ($data['receiving_id'] != 'RECV -1') {
+            $receiving_id = str_replace('RECV ', '', $data['receiving_id']);
+            $receiving_items_serials_model = model(Receiving_items_serials::class);
+            foreach($data['cart'] as $line => $item) {
+                if(isset($item['is_serialized']) && $item['is_serialized'] == 1) {
+                    $serials = array_filter(explode(',', $item['description']));
+                    foreach($serials as $serial) {
+                        $serial_parts = explode('|', $serial);
+                        if(count($serial_parts) > 1) {
+                            $receiving_items_serials_model->save([
+                                'receiving_id' => $receiving_id,
+                                'item_id' => $item['item_id'],
+                                'line' => $line,
+                                'engine_number' => $serial_parts[0],
+                                'chassis_number' => $serial_parts[1]
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
 
         if ($data['receiving_id'] == 'RECV -1') {
             $data['error_message'] = lang('Receivings.transaction_failed');

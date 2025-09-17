@@ -20,6 +20,12 @@
 
 <?= view('partial/header') ?>
 
+<style>
+    #mode_form .panel-body.form-group {
+        background-color: #f2dede !important; /* A light red color */
+    }
+</style>
+
 <?php
 if (isset($error)) {
     echo '<div class="alert alert-dismissible alert-danger">' . esc($error) . '</div>';

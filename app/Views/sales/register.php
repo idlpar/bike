@@ -45,6 +45,12 @@ use App\Models\Employee;
 
 <?= view('partial/header') ?>
 
+<style>
+    #mode_form .panel-body.form-group {
+        background-color: #c8e6c9 !important; /* A darker green color */
+    }
+</style>
+
 <?php
 if (isset($error)) {
     echo '<div class="alert alert-dismissible alert-danger">' . esc($error) . '</div>';

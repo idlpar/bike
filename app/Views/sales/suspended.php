@@ -29,6 +29,7 @@ $this->dinner_table = model(Dinner_table::class);
             <th><?= lang('Sales.customer') ?></th>
             <th><?= lang('Sales.employee') ?></th>
             <th><?= lang('Sales.comments') ?></th>
+            <th><?= lang('Sales.items') ?></th>
             <th><?= lang('Sales.unsuspend_and_delete') ?></th>
         </tr>
     </thead>
@@ -63,6 +64,13 @@ $this->dinner_table = model(Dinner_table::class);
                     <?php } ?>
                 </td>
                 <td><?= esc($suspended_sale['comment']) ?></td>
+                <td>
+                    <ul>
+                        <?php foreach ($suspended_sale['items'] as $item) { ?>
+                            <li><?= $item['name'] . ' (x' . $item['quantity_purchased'] . ')' ?></li>
+                        <?php } ?>
+                    </ul>
+                </td>
                 <td>
                     <?= form_open('sales/unsuspend') ?>
                     <?= form_hidden('suspended_sale_id', $suspended_sale['sale_id']) ?>

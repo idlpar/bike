@@ -102,6 +102,7 @@ return [
     'item_insufficient_of_stock'       => 'Item has insufficient stock.',
     'item_name'                        => 'Item Name',
     'item_number'                      => 'Item #',
+    'items'                            => 'Items',
     'item_out_of_stock'                => 'Item is out of stock.',
     'key_browser'                      => 'Helpful Shortcuts',
     'key_cancel'                       => 'Cancels Current Quote/Invoice/Sale',

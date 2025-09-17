@@ -829,6 +829,7 @@ class Sale extends Model
     public function get_sale_items(int $sale_id): ResultInterface
     {
         $builder = $this->db->table('sales_items');
+        $builder->join('items', 'sales_items.item_id = items.item_id', 'left');
         $builder->where('sale_id', $sale_id);
 
         return $builder->get();
@@ -1163,13 +1164,22 @@ class Sale extends Model
     {
         if ($customer_id == NEW_ENTRY) {
             $query = $this->db->query("SELECT sale_id, case when sale_type = '" . SALE_TYPE_QUOTE . "' THEN quote_number WHEN sale_type = '" . SALE_TYPE_WORK_ORDER . "' THEN work_order_number else sale_id end as doc_id, sale_id as suspended_sale_id, sale_status, sale_time, dinner_table_id, customer_id, employee_id, comment FROM "
-                . $this->db->prefixTable('sales') . ' where sale_status = ' . SUSPENDED);
+                . $this->db->prefixTable('sales') . " where sale_status = " . SUSPENDED);
         } else {
             $query = $this->db->query("SELECT sale_id, case when sale_type = '" . SALE_TYPE_QUOTE . "' THEN quote_number WHEN sale_type = '" . SALE_TYPE_WORK_ORDER . "' THEN work_order_number else sale_id end as doc_id, sale_status, sale_time, dinner_table_id, customer_id, employee_id, comment FROM "
-                . $this->db->prefixTable('sales') . ' where sale_status = ' . SUSPENDED . ' AND customer_id = ' . $customer_id);
+                . $this->db->prefixTable('sales') . " where sale_status = " . SUSPENDED . " AND customer_id = " . $customer_id);
         }
 
-        return $query->getResultArray() ?: [];
+        $suspended_sales = $query->getResultArray();
+
+        if (!empty($suspended_sales)) {
+            foreach ($suspended_sales as &$suspended_sale) {
+                $suspended_sale['items'] = $this->get_sale_items($suspended_sale['sale_id'])->getResultArray();
+            }
+        }
+
+
+        return $suspended_sales ?: [];
     }
 
     /**
